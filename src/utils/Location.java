@@ -2,7 +2,7 @@ package utils;
 
 public class Location implements Validateable{
         private double x;
-        private Long y; //Поле не может быть null
+        private long y; //Поле не может быть null
         private String name; //Строка не может быть пустой, Поле не может быть null
     public Location(double x, Long y){
         this.x = x;

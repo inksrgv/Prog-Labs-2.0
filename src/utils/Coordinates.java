@@ -2,7 +2,7 @@ package utils;
 
 public class Coordinates implements Validateable {
     private double x;
-    private Double y; //Значение поля должно быть больше -210, Поле не может быть null
+    private double y; //Значение поля должно быть больше -210, Поле не может быть null
     public Coordinates(double x, Double y){
         this.x = x;
         this.y = y;
