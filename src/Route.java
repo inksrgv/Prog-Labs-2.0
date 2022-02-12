@@ -23,5 +23,3 @@ public class Route implements Collectionable {
     public Route(String name, Coordinates coordinates, Location date, Location to, Integer distance);
 
 }
-
-
