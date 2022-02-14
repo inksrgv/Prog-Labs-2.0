@@ -1,5 +1,5 @@
 package exceptions;
 
 public class FileNotFoundException extends RuntimeException {
-    public FileNotFoundException() {super ("такого файла не существует");}
+    public FileNotFoundException() {super ("файла с таким path не существует ");}
 }
