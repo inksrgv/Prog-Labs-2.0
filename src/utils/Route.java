@@ -15,7 +15,7 @@ public class Route {
     int nextId = 0;
 
     public Route(String name, double coordinatesX, Double coordinatesY, double fromX, Long fromY, String nameFrom, int toX, float toY, String nameTo, Integer distance ){
-        this.id = nextId++; //вообще не уверена что так надо писать
+        this.id = nextId++;
         this.name = name;
         this.coordinates = new Coordinates(coordinatesX, coordinatesY);
         this.from = new Location(fromX, fromY, nameFrom);
@@ -30,7 +30,7 @@ public class Route {
         coordinates = new Coordinates(information.x, information.y);
         creationDate = ZonedDateTime.now();
         from = new Location(information.fromX, information.fromY, information.nameFrom);
-        to = new lab5.exceptions.src.utils.loc.Location(information.toX, information.toY, information.nameTo);
+        to = new utils.loc.Location(information.toX, information.toY, information.nameTo);
         distance = information.distance;
     }
 

@@ -63,5 +63,8 @@ public class RouteDAO implements DAO {
         return(collection.getFirst().toString());
     }
 
+    public Route toDelete(){
+        return (collection.getFirst());
+    }
 
 }

@@ -34,7 +34,7 @@ public class Commands {
             commandsMap.put("save", new Save()); //я вообще не знаю можно ли args в скобки написать))0)
             //execute script
             //exit
-            //remove first
+            commandsMap.put("remove_first", new RemoveFirst());
             commandsMap.put("head", new Head());
             //add_if_min
             //print_unique_distance
@@ -248,6 +248,19 @@ public class Commands {
                 output("не удалось сохранить коллекцию" + e.getMessage());
             }
             return -1;
+        }
+    }
+
+    class RemoveFirst extends ACommands{
+
+        public int execute(RouteDAO routeDAO){
+            int toDeleteId = routeDAO.toDelete().getId();
+
+            routeDAO.delete(toDeleteId);
+
+            output("первый элемент коллекции успешно удален");
+
+            return 0;
         }
     }
 
