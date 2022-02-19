@@ -1,37 +1,17 @@
 package utils.loc;
 
-import utils.Validateable;
-
-public class Location implements Validateable {
+public class Location {
     private int x;
     private float y;
     private String name; //Поле может быть null
-    public Location(int x, float y){
-        this.x = x;
-        this.y = y;
-    }
-    /**
-     * @return x coordinates
-     */
-    public int getX() {
-        return x;
+
+    public Location(int toX, float toY, String name) {
+        this.x = toX;
+        this.y = toY;
+        this.name = name; //зачем написала не знаю
     }
 
-    /**
-     * @return y coordinates
-     */
-    public float getY() {
-        return y;
-    }
-    @Override
-    public String toString(){
-        String s = "";
-        s += "{\"x\" : " + Int.toString(x) + ", "; //Почему ошибка
-        s += "\"y\" : " + Float.toString(y) + "}";
-        return s;
-    }
-    public boolean validate(){
-        return !(); //Прописать условие с нулевым полем
-    }
+    public int getToX(){return x;}
+
+    public float getToY() {return  y;}
 }
-
