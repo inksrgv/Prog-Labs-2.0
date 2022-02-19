@@ -9,7 +9,7 @@ public class Route {
     private Coordinates coordinates; //Поле не может быть null
     private java.time.ZonedDateTime creationDate; //Поле не может быть null, Значение этого поля должно генерироваться автоматически
     private Location from; //Поле не может быть null
-    private lab5.exceptions.src.utils.loc.Location to; //Поле может быть null
+    private utils.loc.Location to; //Поле может быть null
     private Integer distance; //Поле не может быть null, Значение поля должно быть больше 1
 
     int nextId = 0;
@@ -19,7 +19,7 @@ public class Route {
         this.name = name;
         this.coordinates = new Coordinates(coordinatesX, coordinatesY);
         this.from = new Location(fromX, fromY, nameFrom);
-        this.to = new lab5.exceptions.src.utils.loc.Location(toX, toY, nameTo);
+        this.to = new utils.loc.Location(toX, toY, nameTo);
         this.distance = distance;
 
     }
@@ -44,7 +44,7 @@ public class Route {
 
     public Location getFrom(){return from;}
 
-    public lab5.exceptions.src.utils.loc.Location getTo(){return to;}
+    public utils.loc.Location getTo(){return to;}
 
     public void setName(String name) { this.name = name; }
 
@@ -54,7 +54,7 @@ public class Route {
 
     public void setFrom(Location from){this.from = from;}
 
-    public void setTo(lab5.exceptions.src.utils.loc.Location to){this.to = to;}
+    public void setTo(utils.loc.Location to){this.to = to;}
 
 
 }
