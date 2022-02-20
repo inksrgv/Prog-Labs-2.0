@@ -11,7 +11,6 @@ import java.nio.charset.StandardCharsets;
 public class FileWriter {
     File file = new File("collection.csv");
 
-
     public void write(RouteDAO routeDAO)  {
         try{
             if (!file.exists()) {

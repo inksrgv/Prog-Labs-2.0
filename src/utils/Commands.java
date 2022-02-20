@@ -3,7 +3,17 @@ package utils;
 import dao.*;
 import file.FileWriter;
 
+
 import java.util.*;
+import java.util.List;
+import java.awt.FlowLayout;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 import static io.ConsoleOutputer.output;
 
@@ -43,6 +53,7 @@ public class Commands {
             commandsMap.put("print_unique_distance", new PrintUniqueDistance());
             commandsMap.put("print_field_ascending_distance", new PrintAscendingDistance());
             commandsMap.put("print_field_descending_distance", new PrintDescendingDistance());
+            commandsMap.put("secret", new Rzhaka());
         }
 
         public static ACommands getCommand(List<String> input) {
@@ -92,6 +103,7 @@ public class Commands {
             System.out.println("print_unique_distance : " + "вывести уникальные значения поля distance всех элементов в коллекции ");
             System.out.println("print_field_ascending_distance :  " + "вывести значения поля distance всех элементов в порядке возрастания ");
             System.out.println("print_field_descending_distance :  вывести значения поля distance всех элементов в порядке убывания ");
+            System.out.println("secret: не скажу что это такое хихи, узнай экспериментальным путем");;
 
         }
 
@@ -243,7 +255,12 @@ public class Commands {
 
     static class Head extends ACommands {
         public void execute(RouteDAO routeDAO){
-            System.out.println(routeDAO.printFirst());
+            if (routeDAO.getAll().size() == 0){
+                System.out.println("пусто...");
+            }
+            else {
+                System.out.println(routeDAO.printFirst());
+            }
         }
     }
 
@@ -339,8 +356,62 @@ public class Commands {
 
         }
     }
-}
 
+    static class Rzhaka extends ACommands{
+
+        public void execute(RouteDAO routeDAO) {
+            while(true){
+                try {
+                    File file = new File("C:\\Users\\Софья\\OneDrive\\Изображения\\подарок.jpg");
+                    BufferedImage bufferedImage = ImageIO.read(file);
+
+                    ImageIcon imageIcon = new ImageIcon(bufferedImage);
+                    JFrame jFrame = new JFrame();
+
+                    jFrame.setLayout(new FlowLayout());
+
+                    jFrame.setSize(500, 500);
+                    JLabel jLabel = new JLabel();
+
+                    jLabel.setIcon(imageIcon);
+                    jFrame.add(jLabel);
+                    jFrame.setVisible(true);
+
+                    jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                System.out.println("но это только первая часть подарка. чтобы увидеть вторую введите cringe");
+                if (Objects.equals(sc.nextLine(), "cringe")) {
+                    try {
+                        File file = new File("C:\\Users\\Софья\\OneDrive\\Изображения\\a.jpg");
+                        BufferedImage bufferedImage = ImageIO.read(file);
+                        ImageIcon imageIcon = new ImageIcon(bufferedImage);
+                        JFrame jFrame = new JFrame();
+
+                        jFrame.setLayout(new FlowLayout());
+
+                        jFrame.setSize(700, 200);
+                        JLabel jLabel = new JLabel();
+
+                        jLabel.setIcon(imageIcon);
+                        jFrame.add(jLabel);
+                        jFrame.setVisible(true);
+
+                        jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                        break;
+
+                    } catch (IOException e) { e.printStackTrace();}
+                    }
+                else{
+                    System.out.println("зачем команду ломаешь...");
+                }
+            }
+        }
+    }
+}
+//C:\\Users\\Софья\\Downloads\\шлепа.jpg
 
 
 
