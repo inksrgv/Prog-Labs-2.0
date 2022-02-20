@@ -57,9 +57,13 @@ public class RouteDAO implements DAO {
         Map<String, String> routes = new LinkedHashMap<>();
         for (Route route : collection){
             routes.put("тип: ", collection.getClass().getSimpleName());
+
             routes.put("размер: ", String.valueOf(collection.size()));
+
             routes.put("дата иницализации: ", String.format(initDate, "dd.MM.yyy: HH.mm.ss"));
-            routes.put("описание элементов: ", route.toString());
+
+            //routes.put("описание элементов: ", route.toString());
+
         }
         return routes;
     }

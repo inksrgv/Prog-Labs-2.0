@@ -12,10 +12,8 @@ public class Route {
     private utils.loc.Location to; //Поле может быть null
     private Integer distance; //Поле не может быть null, Значение поля должно быть больше 1
 
-    int nextId= 1;
-
     public Route(String name, double coordinatesX, Double coordinatesY, double fromX, Long fromY, String nameFrom, int toX, float toY, String nameTo, Integer distance ){
-        this.id = nextId++;
+        this.id = IdGenerator.nextId();
         this.name = name;
         this.coordinates = new Coordinates(coordinatesX, coordinatesY);
         this.from = new Location(fromX, fromY, nameFrom);
@@ -25,7 +23,7 @@ public class Route {
     }
 
     public Route(RouteInfo information){
-        id = nextId++;
+        id = IdGenerator.nextId();
         name = information.name;
         coordinates = new Coordinates(information.x, information.y);
         creationDate = ZonedDateTime.now();
@@ -74,3 +72,9 @@ public class Route {
 
 }
 
+class IdGenerator{
+    public static int id = 0;
+    public static int nextId(){
+        return  id++;
+    }
+}

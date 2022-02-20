@@ -21,6 +21,7 @@ public class Commands {
     static FileWriter writer = new FileWriter();
     static Scanner sc = new Scanner(System.in);
     static Console console = new Console();
+    static List<Integer> distanceList = new ArrayList<>();
 
     private static class CommandSaver {
         public static final Map<String, ACommands> commandsMap = new LinkedHashMap<>();
@@ -38,10 +39,10 @@ public class Commands {
             commandsMap.put("exit", new Exit());
             commandsMap.put("remove_first", new RemoveFirst());
             commandsMap.put("head", new Head());
-            //add_if_min
+            commandsMap.put("add_if_min", new AddIfMin());
             commandsMap.put("print_unique_distance", new PrintUniqueDistance());
-            //print_field_ascending_distance
-            //print_field_descending_distance
+            commandsMap.put("print_field_ascending_distance", new PrintAscendingDistance());
+            commandsMap.put("print_field_descending_distance", new PrintDescendingDistance());
         }
 
         public static ACommands getCommand(List<String> input) {
@@ -134,7 +135,6 @@ public class Commands {
         }
     }
 
-
     static class UpdateById extends ACommands {
 
         public void execute(RouteDAO routeDAO) {
@@ -173,7 +173,6 @@ public class Commands {
         }
     }
 
-
     static class RemoveById extends ACommands {
         public void execute(RouteDAO routeDAO) {
             if (routeDAO.getAll().size() == 0) {
@@ -181,7 +180,7 @@ public class Commands {
             else {
                 System.out.println("введите id");
                 try {
-                    int id = sc.nextInt();
+                    int id = Integer.parseInt(sc.nextLine());
                     for (Route route : routeDAO.getAll()) {
                         if (route.getId() == id) {
                             routeDAO.delete(route);
@@ -247,7 +246,6 @@ public class Commands {
             System.out.println(routeDAO.printFirst());
         }
     }
-//TODO у дву элементов коллекции айди одинаковые еб твою мать)
 
     static class PrintUniqueDistance extends ACommands {
         public void execute(RouteDAO routeDAO) {
@@ -263,7 +261,82 @@ public class Commands {
 
     static class Exit extends ACommands{
         public void execute(RouteDAO routeDAO){
+            System.out.println("пока.");
             System.exit(0);
+        }
+    }
+
+    static class AddIfMin extends ACommands{
+        public void execute(RouteDAO routeDAO){
+            if (routeDAO.getAll().size() == 0){
+                System.out.println("коллекция пустая"); //TODO посоветоваться что делать : 1) добавлять сразу элемент
+                // 2) не добавлять 3) вообще не учитывать случай когда коллекция и так пустая
+            }
+            else{
+            while(true) {
+                try {
+                    RouteInfo info = console.info();
+
+                    for (Route route : routeDAO.getAll()) {
+                        distanceList.add(route.getDistance());
+                    }
+                    Collections.sort(distanceList);
+
+                    if (info.distance < distanceList.get(0)) {
+                        Route route = new Route(info.name, info.x, info.y, info.fromX,
+                                info.fromY, info.nameFrom, info.toX, info.toY, info.nameTo,
+                                info.distance);
+                        routeDAO.create(route);
+                        System.out.println("новый элемент успешно добавлен в коллекцию");
+                        break;
+                    } else {
+                        System.out.println("новый элемент коллекции больше чем минимальный элемент.");
+                        System.out.println("введите другой элемент");
+                        if (Objects.equals(sc.nextLine(), "exit")){
+                            break;
+                        }
+                    }
+                } catch (RuntimeException e) {
+                    System.out.println(" невозможно добавить элемент в коллекцию");
+                }
+            }
+            }
+        }
+    }
+
+    static class PrintAscendingDistance extends ACommands{
+        public void execute(RouteDAO routeDAO){
+
+            if (routeDAO.getAll().size() == 0) {
+                System.out.println("коллекция пустая. нечего выводить");
+
+            } else {
+                for (Route route : routeDAO.getAll()) {
+                    distanceList.add(route.getDistance());
+                }
+                Collections.sort(distanceList);
+                System.out.println("значения поля distance всех элементов в порядке возрастания: ");
+                System.out.println(distanceList);
+            }
+
+        }
+    }
+
+    static class PrintDescendingDistance extends ACommands{
+        public void execute(RouteDAO routeDAO){
+
+            if (routeDAO.getAll().size() == 0) {
+                System.out.println("коллекция пустая. нечего выводить");
+            } else {
+                for (Route route : routeDAO.getAll()) {
+                    distanceList.add(route.getDistance());
+                }
+                Collections.sort(distanceList);
+                Collections.reverse(distanceList);
+                System.out.println("вывести значения поля distance всех элементов в порядке убывания: ");
+                System.out.println(distanceList);
+            }
+
         }
     }
 }
