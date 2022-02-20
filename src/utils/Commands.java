@@ -24,7 +24,7 @@ public class Commands {
     private static class CommandSaver{
         public static final Map<String, ACommands> commandsMap = new LinkedHashMap<>();
 
-        public CommandSaver() {
+        static {
             commandsMap.put("help", new Help());
             commandsMap.put("info", new Info());
             commandsMap.put("show", new Show());
@@ -121,7 +121,7 @@ public class Commands {
 
             }
             for (Route route : routeDAO.getAll())
-                output(route);
+                output(route.toString());
 
         }
     }
@@ -130,30 +130,15 @@ public class Commands {
     static class AddElement extends ACommands {
 
         public void execute(RouteDAO routeDAO) {
-            RouteInfo info = new RouteInfo();
+
             try{
-                info.name = console.info().name;
-                info.x = console.info().x;
-                info.y = console.info().y;
-                if(info.y < -210){
-                    output("значение поля Y недопустимо");
-                }
-
-                info.fromX = console.info().fromX;
-                info.fromY = console.info().fromY;
-                info.nameFrom = console.info().nameFrom;
-
-                info.toX = console.info().toX;
-                info.toY = console.info().toY;
-                info.nameTo = console.info().nameTo;
-
-                info.distance = console.info().distance;
+                RouteInfo info = console.info();
                 Route route = new Route(info.name, info.x, info.y, info.fromX,
                         info.fromY, info.nameFrom, info.toX, info.toY, info.nameTo,
                         info.distance);
                 routeDAO.create(route);
             } catch (RuntimeException e){
-                output(" невозможно добавить элемент в коллекцию");
+                System.out.println(" невозможно добавить элемент в коллекцию");
 
             }
             output("элемент добавлен в коллекцию");
@@ -173,7 +158,6 @@ public class Commands {
             } catch (RuntimeException e) {
                     output("введите тип данных int");
             }
-
             boolean flag = false;
             for (Route route : routeDAO.getAll()) {
                 if (route.getId() == id) {
@@ -184,24 +168,8 @@ public class Commands {
             if (!flag) {output("элемента с таким id нет");}
 
             try{
-                RouteInfo info = new RouteInfo();
+                RouteInfo info = console.info();
 
-                info.name = args.get(1);
-                info.x = Double.parseDouble(args.get(2));
-                info.y = Double.parseDouble(args.get(3));
-                if(info.y < -210){
-                    output("значение поля Y недопустимо");
-                    }
-
-                info.fromX = Double.parseDouble(args.get(4));
-                info.fromY = Long.parseLong(args.get(5));
-                info.nameFrom = args.get(6);
-
-                info.toX = Integer.parseInt(args.get(7));
-                info.toY = Float.parseFloat(args.get(8));
-                info.nameTo = args.get(9);
-
-                info.distance = Integer.parseInt(args.get(10));
                 Route route = new Route(info.name, info.x, info.y, info.fromX,
                         info.fromY, info.nameFrom, info.toX, info.toY, info.nameTo,
                         info.distance);

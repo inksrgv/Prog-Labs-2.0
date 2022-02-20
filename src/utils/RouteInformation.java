@@ -55,89 +55,83 @@ class Console implements RouteInformation{
             }
         }
 
-            System.out.println("Введите точку отправления Х, double");
-            while (true) {
-                try {
-                    out.fromX = sc.nextDouble();
-                    break;
-                } catch (RuntimeException e) {
-                    System.out.println("введите данные типа double");
-                }
+        System.out.println("Введите точку отправления Х, double");
+        while (true) {
+            try {
+                out.fromX = sc.nextDouble();
+                break;
+            } catch (RuntimeException e) {
+                System.out.println("введите данные типа double");
             }
+        }
 
-            System.out.println("Введите точку отправления У,Long (поле не может быть null)");
-            while (true) {
-                try {
-                    out.fromY = sc.nextLong();
-                    if (out.fromY == null)
-                    {
-                        System.out.println("поле не может быть пустым");
-                    }
-                        break;
-                } catch (RuntimeException e) {
-                    System.out.println("введите данные типа Long");
-                }
+        System.out.println("Введите точку отправления У,Long (поле не может быть null)");
+        while (true) {
+            try {
+                out.fromY = sc.nextLong();
+                break;
+            } catch (RuntimeException e) {
+                System.out.println("введите данные типа Long");
             }
+        }
+        System.out.println("Введите название точки отправления, String");
+        while (true) {
+            try {
+                out.nameFrom = sc.nextLine();
+                if (out.nameFrom.isEmpty()) {
+                    System.out.println("название не может быть пустым");
+                    continue;
+                }
+                break;
+            } catch (RuntimeException e) {
+                System.out.println("введите строку");
+            }
+        }
+        System.out.println("Введите точку прибытия Х,int");
+        while (true) {
+            try {
+                out.toX = sc.nextInt();
+                break;
+            } catch (RuntimeException e) {
+                System.out.println("введите данные типа int");
+            }
+        }
+        System.out.println("Введите точку прибытия У,float");
+        while (true) {
+            try {
+                out.toY = sc.nextFloat();
+                break;
+            } catch (RuntimeException e) {
+                System.out.println("введите данные типа float");
+            }
+        }
 
-            System.out.println("Введите название точки отправления, String");
-            while (true) {
-                try {
-                    out.nameFrom = sc.nextLine();
-                    if (out.nameFrom.isEmpty()) {
-                        System.out.println("название не может быть пустым");
-                        continue;
-                    }
-                    break;
-                } catch (RuntimeException e) {
-                    System.out.println("введите строку");
+        System.out.println("Введите название точки прибытия, String");
+        while (true) {
+            try {
+                out.nameTo = sc.nextLine();
+                if (out.nameTo.isEmpty()) {
+                    System.out.println("название не может быть пустым");
+                    continue;
                 }
+                break;
+            } catch (RuntimeException e) {
+                System.out.println("введите строку");
             }
+        }
 
-            System.out.println("Введите точку прибытия Х,int");
-            while (true) {
-                try {
-                    out.toX = sc.nextInt();
-                    break;
-                } catch (RuntimeException e) {
-                    System.out.println("введите данные типа int");
+        System.out.println("Введите длину расстояния, Integer");
+        while (true) {
+            try {
+                out.distance = sc.nextInt();
+                if (out.distance < 1) {
+                    throw new InvalidDistanceException();
                 }
+                break;
+            } catch (RuntimeException e) {
+                System.out.println("введите данные типа int");
             }
-            System.out.println("Введите точку прибытия У,float");
-            while (true) {
-                try {
-                    out.toY = sc.nextFloat();
-                    break;
-                } catch (RuntimeException e) {
-                    System.out.println("введите данные типа float");
-                }
-            }
-
-            System.out.println("Введите название точки прибытия, String");
-            while (true) {
-                try {
-                    out.nameTo = sc.nextLine();
-                    if (out.nameTo.isEmpty()) {
-                        System.out.println("название не может быть пустым");
-                        continue;
-                    }
-                    break;
-                } catch (RuntimeException e) {
-                    System.out.println("введите строку");
-                }
-            }
-
-            System.out.println("Введите длину расстояния, Integer");
-            while (true) {
-                try {
-                    out.distance = sc.nextInt();
-                    if (out.distance < 1) {
-                        throw new InvalidDistanceException();
-                    }
-                    break;
-                } catch (RuntimeException e) {
-                    System.out.println("введите данные типа int");
-                }
-            }
+        }
         }
         return out;
     }
