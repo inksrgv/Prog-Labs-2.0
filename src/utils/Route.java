@@ -12,7 +12,7 @@ public class Route {
     private utils.loc.Location to; //Поле может быть null
     private Integer distance; //Поле не может быть null, Значение поля должно быть больше 1
 
-    int nextId = 0;
+    int nextId= 1;
 
     public Route(String name, double coordinatesX, Double coordinatesY, double fromX, Long fromY, String nameFrom, int toX, float toY, String nameTo, Integer distance ){
         this.id = nextId++;
@@ -34,7 +34,7 @@ public class Route {
         distance = information.distance;
     }
 
-    public int getId() { return id; }
+    public int getId() { return id++; }
 
     public String getName() { return name; }
 
@@ -60,6 +60,17 @@ public class Route {
 
     public void setDistance(int distance){this.distance = distance;}
 
+
+    @Override
+    public String toString(){
+        return "Route" + System.lineSeparator() +
+                "id: " + id + System.lineSeparator() +
+                "name: " + name + System.lineSeparator() +
+                "coordinates: " + coordinates.toString() + System.lineSeparator() +
+                "location (from): " + from.toString() + System.lineSeparator() +
+                "location (to): " + to.toString() + System.lineSeparator() +
+                "distance: " + distance.toString() ;
+    }
 
 }
 

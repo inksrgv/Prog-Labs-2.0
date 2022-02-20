@@ -15,4 +15,12 @@ public class Location {
 
     public Long getFromY(){return y;}
 
+    @Override
+    public String toString() {
+        return "Location{" +
+                "x=" + x +
+                ", y=" + y +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

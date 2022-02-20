@@ -3,6 +3,7 @@ package dao;
 
 
 import utils.Route;
+import utils.RouteInfo;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -12,6 +13,8 @@ public class RouteDAO implements DAO {
 
     protected Deque<Route> collection = new ArrayDeque<>();
     public String initDate = ZonedDateTime.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+    RouteInfo routeInfo = new RouteInfo();
+    Route route = new Route(routeInfo);
 
     public void create(Route route) {
         collection.add(route);
@@ -30,8 +33,9 @@ public class RouteDAO implements DAO {
         }
     }
 
-    public void delete(int id) {
+    public void delete(Route id) {
         collection.remove(id);
+
     }
 
     public Route get(int id) {
@@ -50,13 +54,12 @@ public class RouteDAO implements DAO {
     public int clear(){collection.clear(); return 0;}
 
     public Map<String, String> getDescription() {
-        Map<String, String> routes = new LinkedHashMap<String, String>();
-
+        Map<String, String> routes = new LinkedHashMap<>();
         for (Route route : collection){
             routes.put("тип: ", collection.getClass().getSimpleName());
             routes.put("размер: ", String.valueOf(collection.size()));
-            routes.put("дата иницализации: ", String.format(initDate, "dd.MM.yyy"));
-            // я не знаю что еще добавить туда.
+            routes.put("дата иницализации: ", String.format(initDate, "dd.MM.yyy: HH.mm.ss"));
+            routes.put("описание элементов: ", route.toString());
         }
         return routes;
     }
@@ -67,6 +70,10 @@ public class RouteDAO implements DAO {
 
     public Route toDelete(){
         return (collection.getFirst());
+    }
+
+    public Deque<Route> getCollection() {
+        return collection;
     }
 
 

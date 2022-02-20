@@ -14,4 +14,13 @@ public class Location {
     public int getToX(){return x;}
 
     public float getToY() {return  y;}
+
+    @Override
+    public String toString() {
+        return "Location{" +
+                "x=" + x +
+                ", y=" + y +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

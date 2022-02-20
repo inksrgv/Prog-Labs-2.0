@@ -14,9 +14,11 @@ public interface RouteInformation {
 
 class Console implements RouteInformation{
 
+    Scanner sc = new Scanner(System.in);
+    RouteInfo out = new RouteInfo();
+    List<RouteInfo> routeInfos = new ArrayList<>();
+
     public RouteInfo info() {
-        Scanner sc = new Scanner(System.in);
-        RouteInfo out = new RouteInfo();
 
         System.out.println("Введите название маршрута, не может быть пустым ");
         while (true) {
@@ -30,115 +32,119 @@ class Console implements RouteInformation{
                 System.out.println("введите строку");
             }
         }
-
-        System.out.println("Введите координату x (double), маршрута");
-        while (true) {
-            try {
-                out.x = sc.nextDouble();
+        System.out.println("введите координату Х маршрута (double)");
+        while(true){
+            try{
+                out.x = Double.parseDouble(sc.nextLine());
                 break;
             }
-            catch (RuntimeException e) {
-                System.out.println("введите данные типа double");
-            }
+            catch (RuntimeException e){
+                System.out.println("введен неправильный тип данных");
 
-        System.out.println("Введите координату y (Double, >-210, не может быть null), маршрута");
-        while (true) {
-            try {
-                out.y = sc.nextDouble();
-                if (out.y <= -210) {
-                    System.out.println("значение y должно быть больше -210");
-                    continue;
-                }
+            }
+        }
+        System.out.println("введите координату У маршрута (Double)");
+        while(true){
+            try{
+                out.y = Double.parseDouble(sc.nextLine());
                 break;
-            } catch (RuntimeException e) {
-                System.out.println("введите данные типа Double");
+            }
+            catch (RuntimeException e){
+                System.out.println("введен неправильный тип данных");
+            }
+        }
+        System.out.println("введите точку отправления Х (double)");
+        while(true){
+            try{
+                out.fromX = Double.parseDouble(sc.nextLine());
+                break;
+            }
+            catch (RuntimeException e){
+                System.out.println("введен неправильный тип данных");
+            }
+        }
+        System.out.println("введите точку отправления У (Long)");
+        while(true){
+            try{
+                out.fromY = Long.parseLong(sc.nextLine());
+                break;
+            }
+            catch (RuntimeException e){
+                System.out.println("введен неправильный тип данных");
             }
         }
 
-        System.out.println("Введите точку отправления Х, double");
-        while (true) {
-            try {
-                out.fromX = sc.nextDouble();
-                break;
-            } catch (RuntimeException e) {
-                System.out.println("введите данные типа double");
-            }
-        }
-
-        System.out.println("Введите точку отправления У,Long (поле не может быть null)");
-        while (true) {
-            try {
-                out.fromY = sc.nextLong();
-                break;
-            } catch (RuntimeException e) {
-                System.out.println("введите данные типа Long");
-            }
-        }
-        System.out.println("Введите название точки отправления, String");
+        System.out.println("Введите название точки отправления ");
         while (true) {
             try {
                 out.nameFrom = sc.nextLine();
                 if (out.nameFrom.isEmpty()) {
                     System.out.println("название не может быть пустым");
-                    continue;
-                }
+                    continue;}
                 break;
             } catch (RuntimeException e) {
                 System.out.println("введите строку");
             }
         }
-        System.out.println("Введите точку прибытия Х,int");
-        while (true) {
-            try {
-                out.toX = sc.nextInt();
+
+        System.out.println("введите точку прибытия Х, (int)");
+        while(true){
+            try{
+                out.toX = Integer.parseInt(sc.nextLine());
                 break;
-            } catch (RuntimeException e) {
-                System.out.println("введите данные типа int");
             }
-        }
-        System.out.println("Введите точку прибытия У,float");
-        while (true) {
-            try {
-                out.toY = sc.nextFloat();
-                break;
-            } catch (RuntimeException e) {
-                System.out.println("введите данные типа float");
+            catch (RuntimeException e){
+                System.out.println("введен неправильный тип данных");
             }
         }
 
-        System.out.println("Введите название точки прибытия, String");
-        while (true) {
-            try {
+        System.out.println("введите точку прибытия У (float)");
+        while(true){
+            try{
+                out.toY = Float.parseFloat(sc.nextLine());
+                break;
+            }
+            catch (RuntimeException e){
+                System.out.println("неправильный ввод данных");
+            }
+        }
+        System.out.println("введите название точки прибытия");
+        while(true){
+            try{
                 out.nameTo = sc.nextLine();
-                if (out.nameTo.isEmpty()) {
-                    System.out.println("название не может быть пустым");
+                break;
+            }
+            catch (RuntimeException e){
+                System.out.println("неправильный ввод");
+            }
+        }
+        System.out.println("введите длину маршрута (int), >1");
+        while(true){
+            try{
+                out.distance =Integer.parseInt(sc.nextLine());
+                if(out.distance < 0 || out.distance < 1){
+                    System.out.println("длина маршрута должна быть больше 1");
                     continue;
                 }
                 break;
-            } catch (RuntimeException e) {
-                System.out.println("введите строку");
+            }
+            catch (RuntimeException e){
+                System.out.println("неправильный тип данных");
             }
         }
 
-        System.out.println("Введите длину расстояния, Integer");
-        while (true) {
-            try {
-                out.distance = sc.nextInt();
-                if (out.distance < 1) {
-                    throw new InvalidDistanceException();
-                }
-                break;
-            } catch (RuntimeException e) {
-                System.out.println("введите данные типа int");
-            }
-        }
-        }
-        return out;
+
+        return  out;
+    }
+
+    public List<RouteInfo> outInfo(){
+        routeInfos.add(out);
+        return routeInfos;
     }
 }
 
-//TODO скорее всего беды с командами Add, UpdateById, RemoveById связаны с этим убожищем
-//видимо беды из-за другого
+
+
 class ConsoleReader {
     public List<String> reader(){
         Scanner sc = new Scanner(System.in);
@@ -148,9 +154,6 @@ class ConsoleReader {
         }
         List<String> args = new ArrayList<>(Arrays.asList(command.split(" ")));
 
-        /*for (int i = 0; i < args.size(); i++){
-            System.out.println(args.get(i));
-        }*/
 
         return args;
     }

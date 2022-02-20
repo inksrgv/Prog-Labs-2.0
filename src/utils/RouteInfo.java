@@ -2,6 +2,7 @@ package utils;
 
 
 public class RouteInfo {
+    int id;
     String name;
     double x;
     Double y;

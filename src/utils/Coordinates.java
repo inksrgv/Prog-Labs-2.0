@@ -12,4 +12,12 @@ public class Coordinates {
     public double getCoorX() {return x;};
 
     public Double getCoorY(){return y;}
+
+    @Override
+    public String toString() {
+        return "Coordinates{" +
+                "x=" + x +
+                ", y=" + y +
+                '}';
+    }
 }
