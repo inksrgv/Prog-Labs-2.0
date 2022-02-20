@@ -9,7 +9,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class RouteDAO implements DAO {
-    protected Deque<Route> collection = new ArrayDeque<Route>();
+
+    protected Deque<Route> collection = new ArrayDeque<>();
     public String initDate = ZonedDateTime.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
 
     public void create(Route route) {
@@ -24,6 +25,7 @@ public class RouteDAO implements DAO {
                 route1.setCreationDate(route.getCreationDate());
                 route1.setFrom(route.getFrom());
                 route1.setTo(route.getTo());
+                route1.setDistance(route.getDistance());
             }
         }
     }
@@ -66,5 +68,6 @@ public class RouteDAO implements DAO {
     public Route toDelete(){
         return (collection.getFirst());
     }
+
 
 }

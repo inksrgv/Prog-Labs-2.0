@@ -1,7 +1,7 @@
 package utils;
 
 import dao.*;
-import file.FileSaver;
+import file.FileWriter;
 
 import java.util.*;
 
@@ -13,15 +13,16 @@ abstract class ACommands {
     protected void addArgs(List<String> args) {
         this.args = args;
     }
-    public int execute(RouteDAO routeDAO){ return 0;}
+    public void execute(RouteDAO routeDAO){ }
 }
 
 
 public class Commands {
-    FileSaver saver = new FileSaver();
-
-    private class CommandSaver{
-        private final Map<String, ACommands> commandsMap = new LinkedHashMap<>();
+    static FileWriter writer = new FileWriter();
+    static Scanner sc = new Scanner(System.in);
+    static Console console = new Console();
+    private static class CommandSaver{
+        public static final Map<String, ACommands> commandsMap = new LinkedHashMap<>();
 
         public CommandSaver() {
             commandsMap.put("help", new Help());
@@ -31,22 +32,40 @@ public class Commands {
             commandsMap.put("update_by_id", new UpdateById());
             commandsMap.put("remove_by_id", new RemoveById());
             commandsMap.put("clear", new Clear());
-            commandsMap.put("save", new Save()); //я вообще не знаю можно ли args в скобки написать))0)
+            commandsMap.put("save", new Save());
             //execute script
             //exit
             commandsMap.put("remove_first", new RemoveFirst());
             commandsMap.put("head", new Head());
             //add_if_min
-            //print_unique_distance
+            commandsMap.put("print_unique_distance", new PrintUniqueDistance());
             //print_field_ascending_distance
             //print_field_descending_distance
         }
 
-        public ACommands getCommand(List<String> input) {
+        public static ACommands getCommand(List<String> input) {
             ACommands command = commandsMap.get(input.get(0));
             input.remove(0);
             command.addArgs(input);
             return command;
+        }
+    }
+
+    //TODO не работает вообще. ввожу команду help он мне пишет что такой команды нет)))
+    public static void checkCommand() {
+        RouteDAO dao = new RouteDAO();
+        ACommands commands;
+        ConsoleReader consoleReader = new ConsoleReader();
+
+        System.out.println("Для того чтобы начать введите команду. Чтобы увидеть список доступных команд введите help");
+        while(true) {
+            try {
+                commands = CommandSaver.getCommand(consoleReader.reader());
+                commands.execute(dao);
+            }
+            catch (RuntimeException e) {
+                System.out.println("Введённой вами команды не существует. Попробуйте ввести другую команду.");
+            }
         }
     }
 
@@ -55,7 +74,7 @@ public class Commands {
 
 
         @Override
-        public int execute(RouteDAO routeDAO) {
+        public void execute(RouteDAO routeDAO) {
 
             System.out.println("help : вывести справку по доступным командам ");
             System.out.println("info: вывести в стандартный поток вывода информацию о коллекции (тип, дата инициализации, количество элементов и т.д.) ");
@@ -74,101 +93,96 @@ public class Commands {
             System.out.println("print_unique_distance : "+"вывести уникальные значения поля distance всех элементов в коллекции ");
             System.out.println("print_field_ascending_distance :  "+"вывести значения поля distance всех элементов в порядке возрастания ");
             System.out.println("print_field_descending_distance :  вывести значения поля distance всех элементов в порядке убывания ");
-            return 0;
+
         }
 
     }
 
+    static class Info extends ACommands {
 
-    class Info extends ACommands {
-
-
-        @Override
-        public int execute(RouteDAO routeDAO) {
-            output(routeDAO.getDescription().toString()); // попробуем....
-            return 0;
+        public void execute(RouteDAO routeDAO) {
+            if (Objects.equals(routeDAO.getDescription().toString(), "{}")){
+                System.out.println("коллекция пустая. нечего показывать");
+            }
+            else {
+                output(routeDAO.getDescription().toString());
+            }
         }
     }
 
-    class Show extends ACommands {
+    static class Show extends ACommands {
 
 
         @Override
-        public int execute(RouteDAO routeDAO) {
+        public void execute(RouteDAO routeDAO) {
 
             if (routeDAO.getAll().size() == 0){
                 output("коллекция пустая");
-                return 0;
+
             }
             for (Route route : routeDAO.getAll())
                 output(route);
 
-            return 0;
         }
     }
 
+//TODO оно вообще не работает нихрена
+    static class AddElement extends ACommands {
 
-    class AddElement extends ACommands {
-
-
-        public int execute(RouteDAO routeDAO) {
-
+        public void execute(RouteDAO routeDAO) {
+            RouteInfo info = new RouteInfo();
             try{
-                RouteInfo info = new RouteInfo();
-
-                info.name = args.get(0);
-                info.x = Double.parseDouble(args.get(1));
-                info.y = Double.parseDouble(args.get(2));
+                info.name = console.info().name;
+                info.x = console.info().x;
+                info.y = console.info().y;
                 if(info.y < -210){
                     output("значение поля Y недопустимо");
-                    return -1;}
+                }
 
-                info.fromX = Double.parseDouble(args.get(3));
-                info.fromY = Long.parseLong(args.get(4));
-                info.nameFrom = args.get(5);
+                info.fromX = console.info().fromX;
+                info.fromY = console.info().fromY;
+                info.nameFrom = console.info().nameFrom;
 
-                info.toX = Integer.parseInt(args.get(6));
-                info.toY = Float.parseFloat(args.get(7));
-                info.nameTo = args.get(8);
+                info.toX = console.info().toX;
+                info.toY = console.info().toY;
+                info.nameTo = console.info().nameTo;
 
-                info.distance = Integer.parseInt(args.get(9));
+                info.distance = console.info().distance;
                 Route route = new Route(info.name, info.x, info.y, info.fromX,
                         info.fromY, info.nameFrom, info.toX, info.toY, info.nameTo,
                         info.distance);
                 routeDAO.create(route);
             } catch (RuntimeException e){
                 output(" невозможно добавить элемент в коллекцию");
-                return -1;
+
             }
             output("элемент добавлен в коллекцию");
-            return 0;
+
         }
     }
 
+//TODO он просто выкидывает АБСОЛЮТНО ВСЕ сообщения которые только может, а если вставить не int значение то ломается вообще
+    static class UpdateById extends ACommands {
 
-    class UpdateById extends ACommands {
+        public void execute(RouteDAO routeDAO) {
 
-        //исключения урааааааааааааааааааааааа
-        public int execute(RouteDAO routeDAO) {
-            int id;
-            try{
+            System.out.println("введите параметры для обновления");
+            int id = sc.nextInt();
+            try {
                 id = Integer.parseInt(args.get(0));
-            }
-            catch (RuntimeException e){
-                output("введите тип данных int");
-                return -1;
+            } catch (RuntimeException e) {
+                    output("введите тип данных int");
             }
 
             boolean flag = false;
-            for (Route route: routeDAO.getAll()){
-                if (route.getId() == id){
+            for (Route route : routeDAO.getAll()) {
+                if (route.getId() == id) {
                     flag = true;
                     break;
                 }
             }
-            if (!flag){
-                output("элемента с таким id нет");
-            }
+            if (!flag) {output("элемента с таким id нет");}
+
             try{
                 RouteInfo info = new RouteInfo();
 
@@ -177,7 +191,7 @@ public class Commands {
                 info.y = Double.parseDouble(args.get(3));
                 if(info.y < -210){
                     output("значение поля Y недопустимо");
-                    return -1;}
+                    }
 
                 info.fromX = Double.parseDouble(args.get(4));
                 info.fromY = Long.parseLong(args.get(5));
@@ -195,20 +209,19 @@ public class Commands {
             }
             catch (RuntimeException e){
                 output("типы данных полей не совпали");
-                return -1;
             }
             output("элемент коллекции обновлен");
-            return 0;
         }
+
     }
 
-
-    class RemoveById extends ACommands{
-
-        public int execute(RouteDAO routeDAO){
+//TODO все как с командой выше. я в полном шоке
+    static class RemoveById extends ACommands{
+        public void execute(RouteDAO routeDAO){
             output("введите id");
+            int id;
             try {
-                int id = Integer.parseInt(args.get(0));
+                 id = Integer.parseInt(args.get(0));
                 for (Route route : routeDAO.getAll()){
                     if (route.getId() == id){
                         routeDAO.delete(id);
@@ -216,61 +229,82 @@ public class Commands {
                     }
                     else{
                         output("нет элемента с таким id");
-                        return -1;
                     }
                 }
             }
             catch (RuntimeException e){
                 output("введите число типа int");
-                return -1;
             }
-            return 0;
         }
     }
 
-    class Clear extends ACommands{
+    static class Clear extends ACommands{
 
-        public int execute(RouteDAO routeDAO){
-            routeDAO.clear(); // /neg
-            output("коллекция очищена");
-            return 0;}
-    }
-
-    class Save extends ACommands{
-
-        public int execute(RouteDAO routeDAO){
-            try{
-                saver.save(routeDAO);
-                output("коллекция успешно сохранена");
-                return 0;
+        public void execute(RouteDAO routeDAO) {
+            if (routeDAO.getAll().size() == 0) {
+                System.out.println("невозможно очистить пустую коллекцию");
+            } else {
+                routeDAO.clear();
+                output("коллекция очищена");
             }
-            catch (RuntimeException e){
-                output("не удалось сохранить коллекцию" + e.getMessage());
+        }
+    }
+
+    static class Save extends ACommands{
+        public void execute(RouteDAO routeDAO){
+            if (routeDAO.getAll().size() == 0){
+                System.out.println("коллекция пустая. нечего сохранять");
             }
-            return -1;
+            else {
+                try {
+                    writer.write(routeDAO);
+                    output("коллекция успешно сохранена");
+
+                } catch (RuntimeException e) {
+                    output("не удалось сохранить коллекцию" + e.getMessage());
+                }
+            }
         }
     }
 
-    class RemoveFirst extends ACommands{
+    static class RemoveFirst extends ACommands{
 
-        public int execute(RouteDAO routeDAO){
-            int toDeleteId = routeDAO.toDelete().getId();
+        public void execute(RouteDAO routeDAO){
+            if (routeDAO.getAll().size() == 0){
+                System.out.println("коллекция пустая. нечего удалять");
+            }
+            else {
+                int toDeleteId = routeDAO.toDelete().getId();
 
-            routeDAO.delete(toDeleteId);
+                routeDAO.delete(toDeleteId);
 
-            output("первый элемент коллекции успешно удален");
-
-            return 0;
+                output("первый элемент коллекции успешно удален");
+            }
         }
     }
 
-    class Head extends ACommands{
+    static class Head extends ACommands{
 
-        public int execute(RouteDAO routeDAO){
-            routeDAO.printFirst();
-            return 0;
+        public void execute(RouteDAO routeDAO) {
+            if (routeDAO.getAll().size() == 0) {
+                System.out.println("коллекция пустая. нечего выводить");
+            } else {
+                routeDAO.printFirst();
+            }
         }
+    }
 
+    static class PrintUniqueDistance extends ACommands{
+        public void execute(RouteDAO routeDAO) {
+            if (routeDAO.getAll().size() == 0) {
+                System.out.println("коллекция пустая. нечего выводить");
+            } else {
+                for (Route route : routeDAO.getAll()) {
+                    System.out.println("distance: ");
+                    System.out.print(route.getDistance());
+                }
+            }
+        }
     }
 }
 

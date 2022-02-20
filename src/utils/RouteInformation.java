@@ -1,9 +1,6 @@
 package utils;
 
-//не знаю писать ли интерфейс....пока обойдусь без него
-//надо написать еще много исключений сюда
-//обработать исключения короче
-
+import exceptions.EmptyInputException;
 import exceptions.InvalidDistanceException;
 
 import java.util.ArrayList;
@@ -14,7 +11,6 @@ import java.util.Scanner;
 public interface RouteInformation {
     RouteInfo info();
 }
-
 
 class Console implements RouteInformation{
 
@@ -28,42 +24,36 @@ class Console implements RouteInformation{
                 out.name = sc.nextLine();
                 if (out.name.isEmpty()) {
                     System.out.println("название не может быть пустым");
-                    continue;
-                }
+                    continue;}
                 break;
             } catch (RuntimeException e) {
                 System.out.println("введите строку");
             }
         }
 
-        System.out.println("Введите координаты x (double), маршрута");
+        System.out.println("Введите координату x (double), маршрута");
         while (true) {
             try {
                 out.x = sc.nextDouble();
                 break;
-            } catch (RuntimeException e) {
+            }
+            catch (RuntimeException e) {
                 System.out.println("введите данные типа double");
             }
 
-            System.out.println("Введите координаты y (Double, >-210, не может быть null), маршрута");
-            while (true) {
-                try {
-                    out.y = sc.nextDouble();
-                /*
-                if (out.y.isNaN()){ //не знаю как проверить на null
-                    System.out.println("поле не может быть пустым");
+        System.out.println("Введите координату y (Double, >-210, не может быть null), маршрута");
+        while (true) {
+            try {
+                out.y = sc.nextDouble();
+                if (out.y <= -210) {
+                    System.out.println("значение y должно быть больше -210");
                     continue;
-                }*/
-                    if (out.y <= -210) {
-                        System.out.println("значение y должно быть больше -210");
-                        continue;
-                    }
-                    break;
-                } catch (RuntimeException e) {
-                    System.out.println("введите данные типа Double");
                 }
+                break;
+            } catch (RuntimeException e) {
+                System.out.println("введите данные типа Double");
             }
-
+        }
 
             System.out.println("Введите точку отправления Х, double");
             while (true) {
@@ -82,7 +72,7 @@ class Console implements RouteInformation{
                     if (out.fromY == null)
                     {
                         System.out.println("поле не может быть пустым");
-                    }//леша что-то сказал про parseLong();
+                    }
                         break;
                 } catch (RuntimeException e) {
                     System.out.println("введите данные типа Long");
@@ -153,17 +143,22 @@ class Console implements RouteInformation{
     }
 }
 
-class ConsoleReader{
-    public List<String> read(){
+//TODO скорее всего беды с командами Add, UpdateById, RemoveById связаны с этим убожищем
+//видимо беды из-за другого
+class ConsoleReader {
+    public List<String> reader(){
         Scanner sc = new Scanner(System.in);
-
         String command = sc.nextLine();
+        if (command.isEmpty()){
+            throw new EmptyInputException();
+        }
         List<String> args = new ArrayList<>(Arrays.asList(command.split(" ")));
 
+        /*for (int i = 0; i < args.size(); i++){
+            System.out.println(args.get(i));
+        }*/
 
-
+        return args;
     }
-
-
 }
 

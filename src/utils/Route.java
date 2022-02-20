@@ -46,6 +46,8 @@ public class Route {
 
     public utils.loc.Location getTo(){return to;}
 
+    public int getDistance(){return distance;}
+
     public void setName(String name) { this.name = name; }
 
     public void setCoordinates(Coordinates coordinates) { this.coordinates = coordinates; }
@@ -55,6 +57,8 @@ public class Route {
     public void setFrom(Location from){this.from = from;}
 
     public void setTo(utils.loc.Location to){this.to = to;}
+
+    public void setDistance(int distance){this.distance = distance;}
 
 
 }
