@@ -273,18 +273,15 @@ public class Commands {
 
     static class RemoveFirst extends ACommands {
 
-            public void execute(RouteDAO routeDAO) {
-                if (routeDAO.getAll().size() == 0) {
-                    System.out.println("коллекция пустая. нечего удалять");
-                } else {
-                    Route toDelete = routeDAO.toDelete();
-
-                    routeDAO.delete(toDelete);
-
-                    output("первый элемент коллекции успешно удален");
-                }
+        public void execute(RouteDAO routeDAO) {
+            if (routeDAO.getAll().size() == 0) {
+                System.out.println("коллекция пустая. нечего удалять");
+            } else {
+                routeDAO.removeFirst();
+                output("первый элемент коллекции успешно удален");
             }
         }
+    }
 
     static class Head extends ACommands {
         public void execute(RouteDAO routeDAO){
