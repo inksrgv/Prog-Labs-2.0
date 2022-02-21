@@ -221,28 +221,23 @@ public class Commands {
     static class RemoveById extends ACommands {
         public void execute(RouteDAO routeDAO) {
             if (routeDAO.getAll().size() == 0) {
-                System.out.println("коллекция пустая. нечего удалять");}
-            else {
-                System.out.println("введите id");
+                System.out.println("коллекция пустая. нечего удалять");
+            } else {
                 try {
-                    int id = Integer.parseInt(sc.nextLine());
-                    for (Route route : routeDAO.getAll()) {
-                        if (route.getId() == id) {
-                            routeDAO.delete(route);
-                            System.out.println("элемент удален");
-                            break;
-                        } else {
-                            System.out.println("нет элемента с таким id");
-                            break;
-                        }
+                    System.out.println("введите id");
+                    if (routeDAO.delete(Integer.parseInt(sc.nextLine())) == 15) {
+                        System.out.println("элемент успешно удален");
+                    } else {
+                        System.out.println("нет элемента с таким id");
                     }
-                } catch (RuntimeException e) {
-                    System.out.println("невозможно удалить элемент");
+                }
+                catch (RuntimeException e){
+                    System.out.println("некорректный ввод");
                 }
             }
         }
     }
-
+    
     static class Clear extends ACommands {
 
             public void execute(RouteDAO routeDAO) {
