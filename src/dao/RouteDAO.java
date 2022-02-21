@@ -122,6 +122,9 @@ public class RouteDAO implements DAO {
     public Deque<Route> getCollection() {
         return collection;
     }
-
+    
+     public void removeFirst(){
+        collection.remove(collection.getFirst());
+    }
 
 }
