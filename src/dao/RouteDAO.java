@@ -26,7 +26,7 @@ public class RouteDAO implements DAO {
 
     /**
      * Метод, который позволяет обновить элемент коллекции по его id
-     * @param id - id элмента, который пользователь хочет обновить
+     * @param id - id элемента, который пользователь хочет обновить
      * @param route - характеристики, свойственные элементы коллекции
      */
     public void update(int id, Route route) {
@@ -46,8 +46,9 @@ public class RouteDAO implements DAO {
      * Метод, позволяющий удалить элемнт из коллекции по его id
      * @param id - id элемента, который пользователь хочет удалить
      */
-    public void delete(Route id) {
-        collection.remove(id);
+    public int delete(int id) {
+        if(collection.removeIf(route -> route.getId() == id)){return 15;}
+        return 20;
     }
 
     /**
