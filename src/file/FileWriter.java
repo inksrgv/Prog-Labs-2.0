@@ -9,7 +9,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 
 public class FileWriter {
-    File file = new File("collection.csv");
+    File file = new File("C:\\Users\\Софья\\OneDrive\\Рабочий стол\\collection.csv");
 
     public void write(RouteDAO routeDAO)  {
         try{
@@ -29,7 +29,7 @@ public class FileWriter {
             System.out.println(e.getMessage());
         }
     }
-    /*public void remove(int id){
+    public void clear(){
         file.delete();
-    }*/
+    }
 }

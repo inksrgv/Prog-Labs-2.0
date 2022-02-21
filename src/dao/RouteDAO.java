@@ -9,33 +9,29 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+import static io.ConsoleOutputer.output;
+
 public class RouteDAO implements DAO {
 
     protected Deque<Route> collection = new ArrayDeque<>();
     public String initDate = ZonedDateTime.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
     RouteInfo routeInfo = new RouteInfo();
-    Route route = new Route(routeInfo);
 
     public void create(Route route) {
         collection.add(route);
     }
 
-    public void update(int id, Route route) {
-        for (Route route1: collection){
-            if (route1.getId() == id){
-                route1.setName(route.getName());
-                route1.setCoordinates(route.getCoordinates());
-                route1.setCreationDate(route.getCreationDate());
-                route1.setFrom(route.getFrom());
-                route1.setTo(route.getTo());
-                route1.setDistance(route.getDistance());
+    public void update(int id, RouteInfo routeInfo) {
+        for (Route route: collection){
+            if (route.getId() == id){
+                route.update(routeInfo);
             }
         }
     }
 
-    public void delete(Route id) {
-        collection.remove(id);
-
+    public int delete(int id) {
+        if(collection.removeIf(route -> route.getId() == id)){return 15;}
+        return 20;
     }
 
     public Route get(int id) {
@@ -72,13 +68,17 @@ public class RouteDAO implements DAO {
         return(collection.getFirst().toString());
     }
 
-    public Route toDelete(){
-        return (collection.getFirst());
+    public void removeFirst(){
+        collection.remove(collection.getFirst());
+    }
+    public String getCollection() {
+        return collection.toString();
     }
 
-    public Deque<Route> getCollection() {
-        return collection;
+    @Override
+    public String toString() {
+        return  "RouteDAO{" +
+                "collection=" + collection +
+                '}' ;
     }
-
-
 }

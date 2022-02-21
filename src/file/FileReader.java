@@ -8,7 +8,7 @@ public class FileReader {
 
     public void read(){
         try {
-            File file = new File("collection.csv");
+            File file = new File("C:\\Users\\Софья\\OneDrive\\Рабочий стол\\collection.csv");
             long l = file.length();
             FileInputStream fis = new FileInputStream(file);
             BufferedInputStream bis = new BufferedInputStream(fis);

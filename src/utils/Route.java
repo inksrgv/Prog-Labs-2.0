@@ -32,7 +32,7 @@ public class Route {
         distance = information.distance;
     }
 
-    public int getId() { return id++; }
+    public int getId() { return id; }
 
     public String getName() { return name; }
 
@@ -70,10 +70,18 @@ public class Route {
                 "distance: " + distance.toString() ;
     }
 
+    public void update(RouteInfo routeInfo){
+        name = routeInfo.name;
+        coordinates = new Coordinates(routeInfo.x, routeInfo.y);
+        from = new Location(routeInfo.fromX, routeInfo.fromY, routeInfo.nameFrom);
+        to = new utils.loc.Location(routeInfo.toX, routeInfo.toY, routeInfo.nameTo);
+        distance = routeInfo.distance;
+    }
+
 }
 
 class IdGenerator{
-    public static int id = 0;
+    public static int id = 1;
     public static int nextId(){
         return  id++;
     }

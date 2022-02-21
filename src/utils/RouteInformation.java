@@ -8,6 +8,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
+import static io.ConsoleOutputer.output;
+
 public interface RouteInformation {
     RouteInfo info();
 }
@@ -137,12 +139,17 @@ class Console implements RouteInformation{
         return  out;
     }
 
-    public List<RouteInfo> outInfo(){
-        routeInfos.add(out);
-        return routeInfos;
+    public boolean checkId(){
+        while(true) {
+            try {
+                int id= Integer.parseInt(sc.nextLine());
+                return true;
+            } catch (RuntimeException e) {
+                output("введите тип данных int");
+            }
+        }
     }
 }
-
 
 
 class ConsoleReader {
@@ -153,8 +160,6 @@ class ConsoleReader {
             throw new EmptyInputException();
         }
         List<String> args = new ArrayList<>(Arrays.asList(command.split(" ")));
-
-
         return args;
     }
 }
