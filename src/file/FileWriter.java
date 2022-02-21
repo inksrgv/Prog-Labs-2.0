@@ -8,9 +8,16 @@ import utils.RouteInfo;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * Класс, который позволяет осуществлять корректную запись данных в файл
+ */
 public class FileWriter {
     File file = new File("C:\\Users\\Софья\\OneDrive\\Рабочий стол\\collection.csv");
 
+    /**
+     * Метод записи данных о коллекции в файл
+     * @param routeDAO
+     */
     public void write(RouteDAO routeDAO)  {
         try{
             if (!file.exists()) {
