@@ -4,6 +4,9 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 
+/**
+ * Класс, который позволяет пользователю и JVM осуществлять корректное чтение файла
+ */
 public class FileReader {
 
     public void read(){
