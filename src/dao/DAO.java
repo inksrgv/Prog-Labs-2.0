@@ -5,6 +5,9 @@ import utils.Route;
 import java.util.Deque;
 import java.util.Map;
 
+/**
+ * Интерфейс для работы с коллекцией
+ */
 public interface DAO {
     void create(Route route);
     void update(int id, Route route);
