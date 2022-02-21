@@ -142,13 +142,14 @@ public class Commands {
         }
     }
 
-    static class Show extends ACommands {
-        @Override
+    static class Info extends ACommands {
+
         public void execute(RouteDAO routeDAO) {
-            if (routeDAO.getAll().size() == 0) {
-                output("коллекция пустая");
+            if (Objects.equals(routeDAO.getDescription().toString(), "{}")) {
+                System.out.println("коллекция пустая. нечего показывать");
+            } else {
+                fileReader.read(routeDAO);
             }
-            System.out.println(routeDAO.getCollection().toString());
         }
     }
 
