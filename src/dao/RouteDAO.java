@@ -29,15 +29,10 @@ public class RouteDAO implements DAO {
      * @param id - id элемента, который пользователь хочет обновить
      * @param route - характеристики, свойственные элементы коллекции
      */
-    public void update(int id, Route route) {
-        for (Route route1: collection){
-            if (route1.getId() == id){
-                route1.setName(route.getName());
-                route1.setCoordinates(route.getCoordinates());
-                route1.setCreationDate(route.getCreationDate());
-                route1.setFrom(route.getFrom());
-                route1.setTo(route.getTo());
-                route1.setDistance(route.getDistance());
+   public void update(int id, RouteInfo routeInfo) {
+        for (Route route: collection){
+            if (route.getId() == id){
+                route.update(routeInfo);
             }
         }
     }
@@ -112,20 +107,23 @@ public class RouteDAO implements DAO {
      * Метод, который позволяет удалить первый элемнт коллекции
      * @return collection
      */
-    public Route toDelete(){
-        return (collection.getFirst());
+    public void removeFirst(){
+        collection.remove(collection.getFirst());
     }
 
     /**
      * Метод, который позволяет вывести всю коллекцию
      * @return collection
      */
-    public Deque<Route> getCollection() {
-        return collection;
+    public String getCollection() {
+        return collection.toString();
     }
     
-     public void removeFirst(){
-        collection.remove(collection.getFirst());
+     @Override
+    public String toString() {
+        return  "RouteDAO{" +
+                "collection=" + collection +
+                '}' ;
     }
 
 }
