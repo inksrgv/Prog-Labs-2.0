@@ -17,7 +17,9 @@ import javax.swing.JLabel;
 
 import static io.ConsoleOutputer.output;
 
-
+/**
+ * Абстрактный класс команд, в котором прописаны основные параметры класса
+ */
 abstract class ACommands {
     protected List<String> args;
     protected void addArgs(List<String> args) {
@@ -26,7 +28,9 @@ abstract class ACommands {
     public void execute(RouteDAO routeDAO){ }
 }
 
-
+/**
+ * Главный класс команд, в котором мы обозначаем строковое название команды и класс, за который отвечает эта команда
+ */
 public class Commands {
     static FileWriter writer = new FileWriter();
     static Scanner sc = new Scanner(System.in);
@@ -56,6 +60,11 @@ public class Commands {
             commandsMap.put("secret", new Rzhaka());
         }
 
+        /**
+         * Добавление на консоль команд
+         * @param input
+         * @return command
+         */
         public static ACommands getCommand(List<String> input) {
             ACommands command = commandsMap.get(input.get(0));
             input.remove(0);
@@ -64,10 +73,17 @@ public class Commands {
         }
     }
 
+    /**
+     * Метод для запуска программы. Вывод на консоль начала работы программы.
+     */
     public static void runApp() {
         RouteDAO dao = new RouteDAO();
         ACommands commands;
         ConsoleReader consoleReader = new ConsoleReader();
+        System.out.println("\t\t\t\t\t▒██░░░─░▄█▀▄─░▐█▀▄──░▄█▀▄─     ▒█▀▀ \n" +
+                "\t\t\t\t\t▒██░░░░▐█▄▄▐█░▐█▀▀▄░▐█▄▄▐█     ▒▀▀▄ \n" +
+                "\t\t\t\t\t▒██▄▄█░▐█─░▐█░▐█▄▄▀░▐█─░▐█     ▒▄▄▀ " );
+        System.out.println("\t\t\t\t\t\tNika and Sofia production\n");
         System.out.println("Для того чтобы начать введите команду. Чтобы увидеть список доступных команд введите help");
         while(true) {
             try {
@@ -79,7 +95,9 @@ public class Commands {
         }
     }
 
-
+    /**
+     * Класс команды HELP, предназначенной для выведения списка команд и их возможностей
+     */
     static class Help extends ACommands {
 
 
@@ -109,6 +127,10 @@ public class Commands {
 
     }
 
+    /**
+     * Класс, предназначенный для вывода информации об элементах коллекции. Вывод осуществляется с помощью команды getDescription.
+     */
+
     static class Info extends ACommands {
 
         public void execute(RouteDAO routeDAO) {
@@ -130,6 +152,9 @@ public class Commands {
         }
     }
 
+    /**
+     *Класс, предназначенный для добавления элемента в коллекцию
+     */
     static class AddElement extends ACommands {
 
         public void execute(RouteDAO routeDAO) {
@@ -147,6 +172,10 @@ public class Commands {
         }
     }
 
+    /**
+     * Класс, предназначенный для обновления элемента по его id.
+     * @param id - id, введенный пользователем
+     */
     static class UpdateById extends ACommands {
 
         public void execute(RouteDAO routeDAO) {
@@ -185,6 +214,10 @@ public class Commands {
         }
     }
 
+    /**
+     * Класс, предназначенный для удаления элемента по его id
+     * @param id
+     */
     static class RemoveById extends ACommands {
         public void execute(RouteDAO routeDAO) {
             if (routeDAO.getAll().size() == 0) {
