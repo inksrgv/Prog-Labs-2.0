@@ -3,7 +3,6 @@ package file;
 import dao.RouteDAO;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
-
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -14,6 +13,8 @@ import java.io.FileInputStream;
 public class FileReader {
 //TODO парашу окружения
     public void read(RouteDAO routeDAO){
+    /*
+    }
         try {
             File csvData = new File("/path/to/csv");
             CSVParser parser = CSVParser.parse(csvData, CSVFormat.RFC4180);
@@ -24,6 +25,10 @@ public class FileReader {
 
             File file = new File(pathToFile);
             //File file = new File("C:\\Users\\Софья\\OneDrive\\Рабочий стол\\collection.csv");
+
+    public void read(RouteDAO routeDAO){
+        try {
+            File file = new File("C:\\Users\\Софья\\OneDrive\\Рабочий стол\\collection.csv");
             long l = file.length();
             FileInputStream fis = new FileInputStream(file);
             BufferedInputStream bis = new BufferedInputStream(fis);
@@ -34,7 +39,7 @@ public class FileReader {
         catch (Exception e){
             System.out.println(e.getMessage());
         }
-        System.out.println(routeDAO.getDescription().toString());
+        System.out.println(routeDAO.getDescription().toString());*/
     }
 
 }

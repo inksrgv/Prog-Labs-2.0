@@ -148,7 +148,7 @@ public class Commands {
             if (routeDAO.getAll().size() == 0) {
                 output("коллекция пустая");
             }
-            System.out.println(routeDAO.getCollection());
+            System.out.println(routeDAO.getCollection().toString());
         }
     }
 
