@@ -1,9 +1,8 @@
 package utils;
 
 import dao.*;
+import file.FileReader;
 import file.FileWriter;
-
-
 import java.util.*;
 import java.util.List;
 import java.awt.FlowLayout;
@@ -35,7 +34,7 @@ public class Commands {
     static FileWriter writer = new FileWriter();
     static Scanner sc = new Scanner(System.in);
     static Console console = new Console();
-    static List<Integer> distanceList = new ArrayList<>();
+    static FileReader fileReader = new FileReader();
 
     private static class CommandSaver {
         public static final Map<String, ACommands> commandsMap = new LinkedHashMap<>();
@@ -57,7 +56,8 @@ public class Commands {
             commandsMap.put("print_unique_distance", new PrintUniqueDistance());
             commandsMap.put("print_field_ascending_distance", new PrintAscendingDistance());
             commandsMap.put("print_field_descending_distance", new PrintDescendingDistance());
-            commandsMap.put("secret", new Rzhaka());
+            commandsMap.put("surprise", new Rzhaka());
+
         }
 
         /**
@@ -85,7 +85,7 @@ public class Commands {
                 "\t\t\t\t\t▒██▄▄█░▐█─░▐█░▐█▄▄▀░▐█─░▐█     ▒▄▄▀ " );
         System.out.println("\t\t\t\t\t\tNika and Sofia production\n");
         System.out.println("Для того чтобы начать введите команду. Чтобы увидеть список доступных команд введите help");
-        while(true) {
+        while (true) {
             try {
                 commands = CommandSaver.getCommand(consoleReader.reader());
                 commands.execute(dao);
@@ -121,7 +121,7 @@ public class Commands {
             System.out.println("print_unique_distance : " + "вывести уникальные значения поля distance всех элементов в коллекции ");
             System.out.println("print_field_ascending_distance :  " + "вывести значения поля distance всех элементов в порядке возрастания ");
             System.out.println("print_field_descending_distance :  вывести значения поля distance всех элементов в порядке убывания ");
-            System.out.println("secret: не скажу что это такое хихи, узнай экспериментальным путем");;
+            System.out.println("surprise: не скажу что это такое хихи, узнай экспериментальным путем");
 
         }
 
@@ -137,7 +137,7 @@ public class Commands {
             if (Objects.equals(routeDAO.getDescription().toString(), "{}")) {
                 System.out.println("коллекция пустая. нечего показывать");
             } else {
-                output(routeDAO.getDescription());
+                fileReader.read(routeDAO);
             }
         }
     }
@@ -148,7 +148,7 @@ public class Commands {
             if (routeDAO.getAll().size() == 0) {
                 output("коллекция пустая");
             }
-            System.out.println(routeDAO.getCollection().toString());
+            System.out.println(routeDAO.getCollection());
         }
     }
 
@@ -171,14 +171,16 @@ public class Commands {
             output("элемент добавлен в коллекцию");
         }
     }
-
     /**
      * Класс, предназначенный для обновления элемента по его id.
-     * @param id - id, введенный пользователем
+     * @param
      */
+    //TODO сделать так чтобы вводилось update_by_id (число) и это число считывалось как id
+    // (также относится к remove_by_id, execute_script)
     static class UpdateById extends ACommands{
 
         public void execute(RouteDAO routeDAO) {
+
 
             if (routeDAO.getAll().size() == 0) {
                 System.out.println("коллекция пустая. нечего обновлять");
@@ -220,8 +222,9 @@ public class Commands {
 
     /**
      * Класс, предназначенный для удаления элемента по его id
-     * @param id
+     * @param
      */
+    //TODO сделать цикл чтобы пока не введет правильный id не заканчивалась команда
     static class RemoveById extends ACommands {
         public void execute(RouteDAO routeDAO) {
             if (routeDAO.getAll().size() == 0) {
@@ -241,35 +244,39 @@ public class Commands {
             }
         }
     }
-    
-    static class Clear extends ACommands {
 
-            public void execute(RouteDAO routeDAO) {
-                if (routeDAO.getAll().size() == 0) {
-                    System.out.println("невозможно очистить пустую коллекцию");
-                } else {
-                    routeDAO.clear();
-                    writer.clear();
-                    output("коллекция очищена");
+    static class Clear extends ACommands {
+        static List<Integer> distanceList = new ArrayList<>();
+        public void execute(RouteDAO routeDAO) {
+            if (routeDAO.getAll().size() == 0) {
+                System.out.println("невозможно очистить пустую коллекцию");
+            } else {
+                for (Route route : routeDAO.getAll()) {
+                    distanceList.add(route.getDistance());
                 }
+                routeDAO.clear();
+                writer.clear();
+                distanceList.clear();
+                output("коллекция очищена");
             }
         }
+    }
 
     static class Save extends ACommands {
-            public void execute(RouteDAO routeDAO) {
-                if (routeDAO.getAll().size() == 0) {
-                    System.out.println("коллекция пустая. нечего сохранять");
-                } else {
-                    try {
-                        writer.write(routeDAO);
-                        output("коллекция успешно сохранена");
+        public void execute(RouteDAO routeDAO) {
+            if (routeDAO.getAll().size() == 0) {
+                System.out.println("коллекция пустая. нечего сохранять");
+            } else {
+                try {
+                    writer.write(routeDAO);
+                    output("коллекция успешно сохранена");
 
-                    } catch (RuntimeException e) {
-                        output("не удалось сохранить коллекцию " + e.getMessage());
-                    }
+                } catch (RuntimeException e) {
+                    output("не удалось сохранить коллекцию " + e.getMessage());
                 }
             }
         }
+    }
 
     static class RemoveFirst extends ACommands {
 
@@ -284,11 +291,10 @@ public class Commands {
     }
 
     static class Head extends ACommands {
-        public void execute(RouteDAO routeDAO){
-            if (routeDAO.getAll().size() == 0){
+        public void execute(RouteDAO routeDAO) {
+            if (routeDAO.getAll().size() == 0) {
                 System.out.println("пусто...");
-            }
-            else {
+            } else {
                 System.out.println(routeDAO.printFirst());
             }
         }
@@ -310,14 +316,15 @@ public class Commands {
         }
     }
 
-    static class Exit extends ACommands{
-        public void execute(RouteDAO routeDAO){
+    static class Exit extends ACommands {
+        public void execute(RouteDAO routeDAO) {
             System.out.println("пока.");
             System.exit(0);
         }
     }
 
-   static class AddIfMin extends ACommands {
+    static class AddIfMin extends ACommands {
+        static List<Integer> distanceList = new ArrayList<>();
         public void execute(RouteDAO routeDAO) {
             if (routeDAO.getAll().size() == 0) {
                 System.out.println("коллекция пустая, не с чем сравнивать");
@@ -330,6 +337,7 @@ public class Commands {
                         Collections.sort(distanceList);
                         if (distanceList.get(0) == 2){
                             System.out.println("в коллекции уже содержится элемент с минимальным допустимым значением сравниваемого поля");
+                            distanceList.clear();
                             break;
                         }
                         else {
@@ -340,10 +348,11 @@ public class Commands {
                                         info.distance);
                                 routeDAO.create(route);
                                 System.out.println("новый элемент успешно добавлен в коллекцию");
+                                distanceList.clear();
                                 break;
                             } else {
                                 System.out.println("новый элемент коллекции больше чем минимальный элемент.");
-                                System.out.println("введите другой элемент");
+                                System.out.println(" \uD83E\uDD2Cأدخل عنصرًا آخر");
                                 if (Objects.equals(sc.nextLine(), "exit")) {
                                     break;
                                 }
@@ -357,46 +366,50 @@ public class Commands {
         }
     }
 
-    static class PrintAscendingDistance extends ACommands{
-        public void execute(RouteDAO routeDAO){
-
+    static class PrintAscendingDistance extends ACommands {
+        static List<Integer> distanceList = new ArrayList<>();
+        public void execute(RouteDAO routeDAO) {
+            for (Route route : routeDAO.getAll()) {
+                distanceList.add(route.getDistance());
+            }
             if (routeDAO.getAll().size() == 0) {
                 System.out.println("коллекция пустая. нечего выводить");
 
             } else {
-                for (Route route : routeDAO.getAll()) {
-                    distanceList.add(route.getDistance());
-                }
+
                 Collections.sort(distanceList);
                 System.out.println("значения поля distance всех элементов в порядке возрастания: ");
                 System.out.println(distanceList);
+                distanceList.clear();
             }
 
         }
     }
 
-    static class PrintDescendingDistance extends ACommands{
-        public void execute(RouteDAO routeDAO){
-
+    static class PrintDescendingDistance extends ACommands {
+        static List<Integer> distanceList = new ArrayList<>();
+        public void execute(RouteDAO routeDAO) {
+            for (Route route : routeDAO.getAll()) {
+                distanceList.add(route.getDistance());
+            }
             if (routeDAO.getAll().size() == 0) {
                 System.out.println("коллекция пустая. нечего выводить");
             } else {
-                for (Route route : routeDAO.getAll()) {
-                    distanceList.add(route.getDistance());
-                }
+
                 Collections.sort(distanceList);
                 Collections.reverse(distanceList);
                 System.out.println("значения поля distance всех элементов в порядке убывания: ");
                 System.out.println(distanceList);
+                distanceList.clear();
             }
 
         }
     }
 
-    static class Rzhaka extends ACommands{
+    static class Rzhaka extends ACommands {
 
         public void execute(RouteDAO routeDAO) {
-            while(true){
+            while (true) {
                 try {
                     File file = new File("C:\\Users\\Софья\\OneDrive\\Изображения\\подарок.jpg");
                     BufferedImage bufferedImage = ImageIO.read(file);
@@ -414,11 +427,14 @@ public class Commands {
                     jFrame.setVisible(true);
 
                     jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                    break;
 
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+            }
                 System.out.println("но это только первая часть подарка. чтобы увидеть вторую введите cringe");
+            while(true) {
                 if (Objects.equals(sc.nextLine(), "cringe")) {
                     try {
                         File file = new File("C:\\Users\\Софья\\OneDrive\\Изображения\\a.jpg");
@@ -438,16 +454,15 @@ public class Commands {
                         jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                         break;
 
-                    } catch (IOException e) { e.printStackTrace();}
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                else{
+                } else {
                     System.out.println("зачем команду ломаешь...");
+                    System.out.println("для просмотра второй части подарка введите cringe");
                 }
             }
+            }
         }
-    }
+
 }
-g
-
-
-

@@ -13,9 +13,9 @@ import static io.ConsoleOutputer.output;
 
 public class RouteDAO implements DAO {
 
-    protected Deque<Route> collection = new ArrayDeque<>();
-    public String initDate = ZonedDateTime.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
-    RouteInfo routeInfo = new RouteInfo();
+    public Deque<Route> collection = new ArrayDeque<>();
+    public String initDate = ZonedDateTime.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy : HH.mm.ss"));
+
 
     public void create(Route route) {
         collection.add(route);
@@ -52,13 +52,13 @@ public class RouteDAO implements DAO {
     public Map<String, String> getDescription() {
         Map<String, String> routes = new LinkedHashMap<>();
         for (Route route : collection){
-            routes.put("тип: ", collection.getClass().getSimpleName());
+            routes.put("тип:", collection.getClass().getSimpleName());
 
-            routes.put("размер: ", String.valueOf(collection.size()));
+            routes.put("размер:", String.valueOf(collection.size()));
 
-            routes.put("дата иницализации: ", String.format(initDate, "dd.MM.yyy: HH.mm.ss"));
+            routes.put("дата иницализации:", initDate);
 
-            //routes.put("описание элементов: ", route.toString());
+            //routes.put("описание элементов: ", routeDAO.getCollection());
 
         }
         return routes;
