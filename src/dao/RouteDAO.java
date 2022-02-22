@@ -9,76 +9,85 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+import static io.ConsoleOutputer.output;
+
 public class RouteDAO implements DAO {
 
-    protected Deque<Route> collection = new ArrayDeque<>();
-    public String initDate = ZonedDateTime.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
-    RouteInfo routeInfo = new RouteInfo();
-    Route route = new Route(routeInfo);
+    public Deque<Route> collection = new ArrayDeque<>();
+    public String initDate = ZonedDateTime.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy : HH.mm.ss"));
+
 
     public void create(Route route) {
         collection.add(route);
     }
 
-    public void update(int id, Route route) {
-        for (Route route1: collection){
-            if (route1.getId() == id){
-                route1.setName(route.getName());
-                route1.setCoordinates(route.getCoordinates());
-                route1.setCreationDate(route.getCreationDate());
-                route1.setFrom(route.getFrom());
-                route1.setTo(route.getTo());
-                route1.setDistance(route.getDistance());
-            }
-        }
-    }
 
-    public void delete(Route id) {
-        collection.remove(id);
-
-    }
-
-    public Route get(int id) {
-        for (Route route : collection){
+    /**
+     * Метод, который позволяет обновить элемент коллекции по его id
+     * @param id - id элемента, который пользователь хочет обновить
+     * @param routeInfo - характеристики, свойственные элементы коллекции
+     */
+   public void update(int id, RouteInfo routeInfo) {
+        for (Route route: collection){
             if (route.getId() == id){
-                return route;
+                route.update(routeInfo);
             }
         }
-        return null;
-    }
+   }
 
-    public Deque<Route> getAll() {
-        return new ArrayDeque<>(collection);
-    }
+   public int delete(int id) {
+       if(collection.removeIf(route -> route.getId() == id)){return 15;}
+       return 20;
+   }
 
-    public int clear(){collection.clear(); return 0;}
+   public Route get(int id) {
+       for (Route route : collection){
+           if (route.getId() == id){
+               return route;
+           }
+       }
+       return null;
+   }
 
-    public Map<String, String> getDescription() {
-        Map<String, String> routes = new LinkedHashMap<>();
-        for (Route route : collection){
-            routes.put("тип: ", collection.getClass().getSimpleName());
+   public Deque<Route> getAll() {
+       return new ArrayDeque<>(collection);
+   }
 
-            routes.put("размер: ", String.valueOf(collection.size()));
+   public int clear(){collection.clear(); return 0;}
 
-            routes.put("дата иницализации: ", String.format(initDate, "dd.MM.yyy: HH.mm.ss"));
+   public Map<String, String> getDescription() {
+       Map<String, String> routes = new LinkedHashMap<>();
+       for (Route route : collection){
+           routes.put("тип:", collection.getClass().getSimpleName());
 
-            //routes.put("описание элементов: ", route.toString());
+           routes.put("размер:", String.valueOf(collection.size()));
 
-        }
-        return routes;
-    }
+           routes.put("дата иницализации:", initDate);
 
-    public String printFirst(){
-        return(collection.getFirst().toString());
-    }
+           //routes.put("описание элементов: ", routeDAO.getCollection());
 
-    public Route toDelete(){
-        return (collection.getFirst());
-    }
+       }
+       return routes;
+   }
 
-    public Deque<Route> getCollection() {
-        return collection;
-    }
+   public String printFirst(){
+       return(collection.getFirst().toString());
+   }
 
+   /**
+    * Метод, который позволяет удалить первый элемнт коллекции
+    *
+    */
+   public void removeFirst(){
+       collection.remove(collection.getFirst());
+   }
+
+   /**
+    * Метод, который позволяет вывести всю коллекцию
+    * @return collection
+    */
+   public String getCollection() {
+       return collection.toString();
+   }
 
 }

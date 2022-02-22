@@ -1,12 +1,9 @@
 package utils;
 
 import exceptions.EmptyInputException;
-import exceptions.InvalidDistanceException;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
+
 
 public interface RouteInformation {
     RouteInfo info();
@@ -16,14 +13,14 @@ class Console implements RouteInformation{
 
     Scanner sc = new Scanner(System.in);
     RouteInfo out = new RouteInfo();
-    List<RouteInfo> routeInfos = new ArrayList<>();
+    //List<RouteInfo> routeInfos = new ArrayList<>();
 
     public RouteInfo info() {
 
         System.out.println("Введите название маршрута, не может быть пустым ");
         while (true) {
             try {
-                out.name = sc.nextLine();
+                out.name = sc.nextLine().trim();
                 if (out.name.isEmpty()) {
                     System.out.println("название не может быть пустым");
                     continue;}
@@ -43,11 +40,16 @@ class Console implements RouteInformation{
 
             }
         }
-        System.out.println("введите координату У маршрута (Double)");
+        System.out.println("введите координату У маршрута (Double), >-210");
         while(true){
             try{
                 out.y = Double.parseDouble(sc.nextLine());
-                break;
+                if (out.y < -210){
+                    System.out.println("неверный ввод");
+                }
+                else {
+                    break;
+                }
             }
             catch (RuntimeException e){
                 System.out.println("введен неправильный тип данных");
@@ -137,25 +139,23 @@ class Console implements RouteInformation{
         return  out;
     }
 
-    public List<RouteInfo> outInfo(){
-        routeInfos.add(out);
-        return routeInfos;
-    }
 }
-
 
 
 class ConsoleReader {
     public List<String> reader(){
         Scanner sc = new Scanner(System.in);
-        String command = sc.nextLine();
+        String command = sc.nextLine().trim();
+        //TODO разбивать строку на название команды и id / имя скрипта который надо экзекьют
+        Map<String, String> ids = new HashMap<>();
+
         if (command.isEmpty()){
             throw new EmptyInputException();
         }
         List<String> args = new ArrayList<>(Arrays.asList(command.split(" ")));
-
-
         return args;
+
     }
+
 }
 

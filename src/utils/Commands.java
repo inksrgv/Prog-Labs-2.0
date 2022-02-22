@@ -1,13 +1,24 @@
 package utils;
 
 import dao.*;
+import file.FileReader;
 import file.FileWriter;
-
 import java.util.*;
+import java.util.List;
+import java.awt.FlowLayout;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 import static io.ConsoleOutputer.output;
 
-
+/**
+ * Абстрактный класс команд, в котором прописаны основные параметры класса
+ */
 abstract class ACommands {
     protected List<String> args;
     protected void addArgs(List<String> args) {
@@ -16,12 +27,14 @@ abstract class ACommands {
     public void execute(RouteDAO routeDAO){ }
 }
 
-
+/**
+ * Главный класс команд, в котором мы обозначаем строковое название команды и класс, за который отвечает эта команда
+ */
 public class Commands {
     static FileWriter writer = new FileWriter();
     static Scanner sc = new Scanner(System.in);
     static Console console = new Console();
-    static List<Integer> distanceList = new ArrayList<>();
+    static FileReader fileReader = new FileReader();
 
     private static class CommandSaver {
         public static final Map<String, ACommands> commandsMap = new LinkedHashMap<>();
@@ -43,8 +56,15 @@ public class Commands {
             commandsMap.put("print_unique_distance", new PrintUniqueDistance());
             commandsMap.put("print_field_ascending_distance", new PrintAscendingDistance());
             commandsMap.put("print_field_descending_distance", new PrintDescendingDistance());
+            commandsMap.put("surprise", new Rzhaka());
+
         }
 
+        /**
+         * Добавление на консоль команд
+         * @param input
+         * @return command
+         */
         public static ACommands getCommand(List<String> input) {
             ACommands command = commandsMap.get(input.get(0));
             input.remove(0);
@@ -53,12 +73,19 @@ public class Commands {
         }
     }
 
+    /**
+     * Метод для запуска программы. Вывод на консоль начала работы программы.
+     */
     public static void runApp() {
         RouteDAO dao = new RouteDAO();
         ACommands commands;
         ConsoleReader consoleReader = new ConsoleReader();
+        System.out.println("\t\t\t\t\t▒██░░░─░▄█▀▄─░▐█▀▄──░▄█▀▄─     ▒█▀▀ \n" +
+                "\t\t\t\t\t▒██░░░░▐█▄▄▐█░▐█▀▀▄░▐█▄▄▐█     ▒▀▀▄ \n" +
+                "\t\t\t\t\t▒██▄▄█░▐█─░▐█░▐█▄▄▀░▐█─░▐█     ▒▄▄▀ " );
+        System.out.println("\t\t\t\t\t\tNika and Sofia production\n");
         System.out.println("Для того чтобы начать введите команду. Чтобы увидеть список доступных команд введите help");
-        while(true) {
+        while (true) {
             try {
                 commands = CommandSaver.getCommand(consoleReader.reader());
                 commands.execute(dao);
@@ -68,7 +95,9 @@ public class Commands {
         }
     }
 
-
+    /**
+     * Класс команды HELP, предназначенной для выведения списка команд и их возможностей
+     */
     static class Help extends ACommands {
 
 
@@ -92,10 +121,15 @@ public class Commands {
             System.out.println("print_unique_distance : " + "вывести уникальные значения поля distance всех элементов в коллекции ");
             System.out.println("print_field_ascending_distance :  " + "вывести значения поля distance всех элементов в порядке возрастания ");
             System.out.println("print_field_descending_distance :  вывести значения поля distance всех элементов в порядке убывания ");
+            System.out.println("surprise: не скажу что это такое хихи, узнай экспериментальным путем");
 
         }
 
     }
+
+    /**
+     * Класс, предназначенный для вывода информации об элементах коллекции. Вывод осуществляется с помощью команды getDescription.
+     */
 
     static class Info extends ACommands {
 
@@ -103,7 +137,7 @@ public class Commands {
             if (Objects.equals(routeDAO.getDescription().toString(), "{}")) {
                 System.out.println("коллекция пустая. нечего показывать");
             } else {
-                output(routeDAO.getDescription().toString());
+                fileReader.read(routeDAO);
             }
         }
     }
@@ -118,6 +152,9 @@ public class Commands {
         }
     }
 
+    /**
+     *Класс, предназначенный для добавления элемента в коллекцию
+     */
     static class AddElement extends ACommands {
 
         public void execute(RouteDAO routeDAO) {
@@ -134,213 +171,298 @@ public class Commands {
             output("элемент добавлен в коллекцию");
         }
     }
-
-    static class UpdateById extends ACommands {
+    /**
+     * Класс, предназначенный для обновления элемента по его id.
+     * @param
+     */
+    //TODO сделать так чтобы вводилось update_by_id (число) и это число считывалось как id
+    // (также относится к remove_by_id, execute_script)
+    static class UpdateById extends ACommands{
 
         public void execute(RouteDAO routeDAO) {
+
+
             if (routeDAO.getAll().size() == 0) {
                 System.out.println("коллекция пустая. нечего обновлять");
-            } else {
-                System.out.println("введите параметры для обновления");
-                int id = sc.nextInt();
-                try {
-                    id = Integer.parseInt(args.get(0));
+            }
+            else
+            {
+                System.out.println("введите id");
+                int id = 0;
+                try
+                {
+                    id = Integer.parseInt(sc.nextLine());
                 } catch (RuntimeException e) {
                     output("введите тип данных int");
                 }
+
                 boolean flag = false;
-                for (Route route : routeDAO.getAll()) {
+
+                for (Route route : routeDAO.getAll())
+                {
                     if (route.getId() == id) {
                         flag = true;
                         break;
                     }
                 }
                 if (!flag) {
-                    System.out.println("элемента с таким id нет");
+                    System.out.println("элемента с таким id нет. ведите другой id");
                 }
+
                 try {
                     RouteInfo info = console.info();
-
-                    Route route = new Route(info.name, info.x, info.y, info.fromX,
-                            info.fromY, info.nameFrom, info.toX, info.toY, info.nameTo,
-                            info.distance);
-                    routeDAO.update(id, route);
+                    routeDAO.update(id,info);
                 } catch (RuntimeException e) {
-                    output("типы данных полей не совпали");
+                    output("неверный ввод");
                 }
                 output("элемент коллекции обновлен");
             }
         }
     }
 
+    /**
+     * Класс, предназначенный для удаления элемента по его id
+     * @param
+     */
+    //TODO сделать цикл чтобы пока не введет правильный id не заканчивалась команда
     static class RemoveById extends ACommands {
         public void execute(RouteDAO routeDAO) {
             if (routeDAO.getAll().size() == 0) {
-                System.out.println("коллекция пустая. нечего удалять");}
-            else {
-                System.out.println("введите id");
+                System.out.println("коллекция пустая. нечего удалять");
+            } else {
                 try {
-                    int id = Integer.parseInt(sc.nextLine());
-                    for (Route route : routeDAO.getAll()) {
-                        if (route.getId() == id) {
-                            routeDAO.delete(route);
-                            System.out.println("элемент удален");
-                            break;
-                        } else {
-                            System.out.println("нет элемента с таким id");
-                            break;
-                        }
+                    System.out.println("введите id");
+                    if (routeDAO.delete(Integer.parseInt(sc.nextLine())) == 15) {
+                        System.out.println("элемент успешно удален");
+                    } else {
+                        System.out.println("нет элемента с таким id");
                     }
-                } catch (RuntimeException e) {
-                    System.out.println("невозможно удалить элемент");
+                }
+                catch (RuntimeException e){
+                    System.out.println("некорректный ввод");
                 }
             }
         }
     }
 
     static class Clear extends ACommands {
-
-            public void execute(RouteDAO routeDAO) {
-                if (routeDAO.getAll().size() == 0) {
-                    System.out.println("невозможно очистить пустую коллекцию");
-                } else {
-                    routeDAO.clear();
-                    output("коллекция очищена");
+        static List<Integer> distanceList = new ArrayList<>();
+        public void execute(RouteDAO routeDAO) {
+            if (routeDAO.getAll().size() == 0) {
+                System.out.println("невозможно очистить пустую коллекцию");
+            } else {
+                for (Route route : routeDAO.getAll()) {
+                    distanceList.add(route.getDistance());
                 }
+                routeDAO.clear();
+                writer.clear();
+                distanceList.clear();
+                output("коллекция очищена");
             }
         }
+    }
 
     static class Save extends ACommands {
-            public void execute(RouteDAO routeDAO) {
-                if (routeDAO.getAll().size() == 0) {
-                    System.out.println("коллекция пустая. нечего сохранять");
-                } else {
-                    try {
-                        writer.write(routeDAO);
-                        output("коллекция успешно сохранена");
+        public void execute(RouteDAO routeDAO) {
+            if (routeDAO.getAll().size() == 0) {
+                System.out.println("коллекция пустая. нечего сохранять");
+            } else {
+                try {
+                    writer.write(routeDAO);
+                    output("коллекция успешно сохранена");
 
-                    } catch (RuntimeException e) {
-                        output("не удалось сохранить коллекцию " + e.getMessage());
-                    }
+                } catch (RuntimeException e) {
+                    output("не удалось сохранить коллекцию " + e.getMessage());
                 }
             }
         }
+    }
 
     static class RemoveFirst extends ACommands {
 
-            public void execute(RouteDAO routeDAO) {
-                if (routeDAO.getAll().size() == 0) {
-                    System.out.println("коллекция пустая. нечего удалять");
-                } else {
-                    Route toDelete = routeDAO.toDelete();
-
-                    routeDAO.delete(toDelete);
-
-                    output("первый элемент коллекции успешно удален");
-                }
+        public void execute(RouteDAO routeDAO) {
+            if (routeDAO.getAll().size() == 0) {
+                System.out.println("коллекция пустая. нечего удалять");
+            } else {
+                routeDAO.removeFirst();
+                output("первый элемент коллекции успешно удален");
             }
         }
+    }
 
     static class Head extends ACommands {
-        public void execute(RouteDAO routeDAO){
-            System.out.println(routeDAO.printFirst());
+        public void execute(RouteDAO routeDAO) {
+            if (routeDAO.getAll().size() == 0) {
+                System.out.println("пусто...");
+            } else {
+                System.out.println(routeDAO.printFirst());
+            }
         }
     }
 
     static class PrintUniqueDistance extends ACommands {
+        static Set<Integer> distanceSet = new HashSet<>();
         public void execute(RouteDAO routeDAO) {
             if (routeDAO.getAll().size() == 0) {
                 System.out.println("коллекция пустая. нечего выводить");
-            } else {
-                for (Route route : routeDAO.getAll()) {
-                    System.out.println("distance: " + route.getDistance());
+            }
+            else
+            {
+                for (Route route1 : routeDAO.getAll()){
+                    distanceSet.add(route1.getDistance());
                 }
+                System.out.println("уникальные значения поля distance: " + distanceSet.toString());
             }
         }
     }
 
-    static class Exit extends ACommands{
-        public void execute(RouteDAO routeDAO){
+    static class Exit extends ACommands {
+        public void execute(RouteDAO routeDAO) {
             System.out.println("пока.");
             System.exit(0);
         }
     }
 
-    static class AddIfMin extends ACommands{
-        public void execute(RouteDAO routeDAO){
-            if (routeDAO.getAll().size() == 0){
-                System.out.println("коллекция пустая"); //TODO посоветоваться что делать : 1) добавлять сразу элемент
-                // 2) не добавлять 3) вообще не учитывать случай когда коллекция и так пустая
-            }
-            else{
-            while(true) {
-                try {
-                    RouteInfo info = console.info();
-
-                    for (Route route : routeDAO.getAll()) {
-                        distanceList.add(route.getDistance());
-                    }
-                    Collections.sort(distanceList);
-
-                    if (info.distance < distanceList.get(0)) {
-                        Route route = new Route(info.name, info.x, info.y, info.fromX,
-                                info.fromY, info.nameFrom, info.toX, info.toY, info.nameTo,
-                                info.distance);
-                        routeDAO.create(route);
-                        System.out.println("новый элемент успешно добавлен в коллекцию");
-                        break;
-                    } else {
-                        System.out.println("новый элемент коллекции больше чем минимальный элемент.");
-                        System.out.println("введите другой элемент");
-                        if (Objects.equals(sc.nextLine(), "exit")){
+    static class AddIfMin extends ACommands {
+        static List<Integer> distanceList = new ArrayList<>();
+        public void execute(RouteDAO routeDAO) {
+            if (routeDAO.getAll().size() == 0) {
+                System.out.println("коллекция пустая, не с чем сравнивать");
+            } else {
+                while (true) {
+                    try {
+                        for (Route route : routeDAO.getAll()) {
+                            distanceList.add(route.getDistance());
+                        }
+                        Collections.sort(distanceList);
+                        if (distanceList.get(0) == 2){
+                            System.out.println("в коллекции уже содержится элемент с минимальным допустимым значением сравниваемого поля");
+                            distanceList.clear();
                             break;
                         }
+                        else {
+                            RouteInfo info = console.info();
+                            if (info.distance < distanceList.get(0)) {
+                                Route route = new Route(info.name, info.x, info.y, info.fromX,
+                                        info.fromY, info.nameFrom, info.toX, info.toY, info.nameTo,
+                                        info.distance);
+                                routeDAO.create(route);
+                                System.out.println("новый элемент успешно добавлен в коллекцию");
+                                distanceList.clear();
+                                break;
+                            } else {
+                                System.out.println("новый элемент коллекции больше чем минимальный элемент.");
+                                System.out.println(" \uD83E\uDD2Cأدخل عنصرًا آخر");
+                                if (Objects.equals(sc.nextLine(), "exit")) {
+                                    break;
+                                }
+                            }
+                        }
+                    } catch (RuntimeException e) {
+                        System.out.println(" невозможно добавить элемент в коллекцию");
                     }
-                } catch (RuntimeException e) {
-                    System.out.println(" невозможно добавить элемент в коллекцию");
                 }
-            }
             }
         }
     }
 
-    static class PrintAscendingDistance extends ACommands{
-        public void execute(RouteDAO routeDAO){
-
+    static class PrintAscendingDistance extends ACommands {
+        static List<Integer> distanceList = new ArrayList<>();
+        public void execute(RouteDAO routeDAO) {
+            for (Route route : routeDAO.getAll()) {
+                distanceList.add(route.getDistance());
+            }
             if (routeDAO.getAll().size() == 0) {
                 System.out.println("коллекция пустая. нечего выводить");
 
             } else {
-                for (Route route : routeDAO.getAll()) {
-                    distanceList.add(route.getDistance());
-                }
+
                 Collections.sort(distanceList);
                 System.out.println("значения поля distance всех элементов в порядке возрастания: ");
                 System.out.println(distanceList);
+                distanceList.clear();
             }
 
         }
     }
 
-    static class PrintDescendingDistance extends ACommands{
-        public void execute(RouteDAO routeDAO){
-
+    static class PrintDescendingDistance extends ACommands {
+        static List<Integer> distanceList = new ArrayList<>();
+        public void execute(RouteDAO routeDAO) {
+            for (Route route : routeDAO.getAll()) {
+                distanceList.add(route.getDistance());
+            }
             if (routeDAO.getAll().size() == 0) {
                 System.out.println("коллекция пустая. нечего выводить");
             } else {
-                for (Route route : routeDAO.getAll()) {
-                    distanceList.add(route.getDistance());
-                }
+
                 Collections.sort(distanceList);
                 Collections.reverse(distanceList);
-                System.out.println("вывести значения поля distance всех элементов в порядке убывания: ");
+                System.out.println("значения поля distance всех элементов в порядке убывания: ");
                 System.out.println(distanceList);
+                distanceList.clear();
             }
 
         }
     }
+
+    static class Rzhaka extends ACommands {
+
+        public void execute(RouteDAO routeDAO) {
+            while (true) {
+                try {
+                    File file = new File("C:\\Users\\Софья\\OneDrive\\Изображения\\подарок.jpg");
+                    BufferedImage bufferedImage = ImageIO.read(file);
+
+                    ImageIcon imageIcon = new ImageIcon(bufferedImage);
+                    JFrame jFrame = new JFrame();
+
+                    jFrame.setLayout(new FlowLayout());
+
+                    jFrame.setSize(500, 500);
+                    JLabel jLabel = new JLabel();
+
+                    jLabel.setIcon(imageIcon);
+                    jFrame.add(jLabel);
+                    jFrame.setVisible(true);
+
+                    jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                    break;
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+                System.out.println("но это только первая часть подарка. чтобы увидеть вторую введите cringe");
+            while(true) {
+                if (Objects.equals(sc.nextLine(), "cringe")) {
+                    try {
+                        File file = new File("C:\\Users\\Софья\\OneDrive\\Изображения\\a.jpg");
+                        BufferedImage bufferedImage = ImageIO.read(file);
+                        ImageIcon imageIcon = new ImageIcon(bufferedImage);
+                        JFrame jFrame = new JFrame();
+
+                        jFrame.setLayout(new FlowLayout());
+
+                        jFrame.setSize(700, 200);
+                        JLabel jLabel = new JLabel();
+
+                        jLabel.setIcon(imageIcon);
+                        jFrame.add(jLabel);
+                        jFrame.setVisible(true);
+
+                        jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                        break;
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    System.out.println("зачем команду ломаешь...");
+                    System.out.println("для просмотра второй части подарка введите cringe");
+                }
+            }
+            }
+        }
+
 }
-
-
-
-

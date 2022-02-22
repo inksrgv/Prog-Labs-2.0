@@ -1,6 +1,13 @@
 package utils;
 
+import dao.RouteDAO;
+
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 
 public class Route {
@@ -32,7 +39,7 @@ public class Route {
         distance = information.distance;
     }
 
-    public int getId() { return id++; }
+    public int getId() { return id; }
 
     public String getName() { return name; }
 
@@ -70,10 +77,36 @@ public class Route {
                 "distance: " + distance.toString() ;
     }
 
+    public void update(RouteInfo routeInfo){
+        name = routeInfo.name;
+        coordinates = new Coordinates(routeInfo.x, routeInfo.y);
+        from = new Location(routeInfo.fromX, routeInfo.fromY, routeInfo.nameFrom);
+        to = new utils.loc.Location(routeInfo.toX, routeInfo.toY, routeInfo.nameTo);
+        distance = routeInfo.distance;
+    }
+
+    RouteDAO routeDAO = new RouteDAO();
+    public Deque<Route> collection = new ArrayDeque<>();
+    public String initDate = ZonedDateTime.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+
+    /*public Map<String, String> getDescription() {
+        Map<String, String> routes = new LinkedHashMap<>();
+        for (Route route : routeDAO.getAll()){
+            routes.put("тип:", collection.getClass().getSimpleName());
+
+            routes.put("размер:", String.valueOf(collection.size()));
+
+            routes.put("дата иницализации:", String.format(initDate, "dd.MM.yyy: HH.mm.ss"));
+
+            routes.put("описание элементов: ", routeDAO.getCollection());
+
+        }
+        return routes;
+    }*/
 }
 
 class IdGenerator{
-    public static int id = 0;
+    public static int id = 1;
     public static int nextId(){
         return  id++;
     }
