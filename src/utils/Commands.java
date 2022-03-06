@@ -38,7 +38,6 @@ public class Commands {
 
     private static class CommandSaver {
         public static final Map<String, ACommands> commandsMap = new LinkedHashMap<>();
-
         static {
             commandsMap.put("help", new Help());
             commandsMap.put("info", new Info());
@@ -48,7 +47,7 @@ public class Commands {
             commandsMap.put("remove_by_id", new RemoveById());
             commandsMap.put("clear", new Clear());
             commandsMap.put("save", new Save());
-            //execute script
+            commandsMap.put("execute_script", new ExecuteScript()); //написан только скелет и считывание имени скрипта из строки
             commandsMap.put("exit", new Exit());
             commandsMap.put("remove_first", new RemoveFirst());
             commandsMap.put("head", new Head());
@@ -62,13 +61,13 @@ public class Commands {
 
         /**
          * Добавление на консоль команд
-         * @param input
+         * @param args
          * @return command
          */
-        public static ACommands getCommand(List<String> input) {
-            ACommands command = commandsMap.get(input.get(0));
-            input.remove(0);
-            command.addArgs(input);
+        public static ACommands getCommand(List<String> args) {
+            ACommands command = commandsMap.get(args.get(0));
+            args.remove(0);
+            command.addArgs(args);
             return command;
         }
     }
@@ -108,7 +107,7 @@ public class Commands {
             System.out.println("info: вывести в стандартный поток вывода информацию о коллекции (тип, дата инициализации, количество элементов и т.д.) ");
             System.out.println("show: " + "вывести в стандартный поток вывода все элементы коллекции в строковом представлении ");
             System.out.println("add {element} : " + "добавить новый элемент в коллекцию ");
-            System.out.println("update id {element} : " + "обновить значение элемента коллекции, id которого равен заданному ");
+            System.out.println("update_by_id {element} : " + "обновить значение элемента коллекции, id которого равен заданному ");
             System.out.println("remove_by_id id :" + "удалить элемент из коллекции по его id ");
             System.out.println("clear :  " + "очистить коллекцию ");
             System.out.println("save: " + "сохранить колекцию в файл ");
@@ -175,47 +174,38 @@ public class Commands {
      * Класс, предназначенный для обновления элемента по его id.
      * @param
      */
-    //TODO сделать так чтобы вводилось update_by_id (число) и это число считывалось как id
-    // (также относится к remove_by_id, execute_script)
+
     static class UpdateById extends ACommands{
 
         public void execute(RouteDAO routeDAO) {
 
-
+            int idFromConcole = Integer.parseInt(args.get(0));
             if (routeDAO.getAll().size() == 0) {
                 System.out.println("коллекция пустая. нечего обновлять");
             }
-            else
-            {
-                System.out.println("введите id");
-                int id = 0;
-                try
-                {
-                    id = Integer.parseInt(sc.nextLine());
-                } catch (RuntimeException e) {
-                    output("введите тип данных int");
-                }
+            else {
 
                 boolean flag = false;
 
-                for (Route route : routeDAO.getAll())
-                {
-                    if (route.getId() == id) {
-                        flag = true;
+                    for (Route route : routeDAO.getAll()) {
+                        if (route.getId() == idFromConcole) {
+                            flag = true;
+                            break;
+                        }
                         break;
                     }
-                }
-                if (!flag) {
-                    System.out.println("элемента с таким id нет. ведите другой id");
-                }
 
-                try {
-                    RouteInfo info = console.info();
-                    routeDAO.update(id,info);
-                } catch (RuntimeException e) {
-                    output("неверный ввод");
+                if (!flag) {
+                    System.out.println("элемента с таким id нет. ведите команду заново с валидным id");
+                } else {
+                    try {
+                        RouteInfo info = console.info();
+                        routeDAO.update(idFromConcole, info);
+                    } catch (RuntimeException e) {
+                        output("неверный ввод");
+                    }
+                    output("элемент коллекции обновлен");
                 }
-                output("элемент коллекции обновлен");
             }
         }
     }
@@ -224,23 +214,25 @@ public class Commands {
      * Класс, предназначенный для удаления элемента по его id
      * @param
      */
-    //TODO сделать цикл чтобы пока не введет правильный id не заканчивалась команда
+
     static class RemoveById extends ACommands {
         public void execute(RouteDAO routeDAO) {
             if (routeDAO.getAll().size() == 0) {
                 System.out.println("коллекция пустая. нечего удалять");
             } else {
-                try {
-                    System.out.println("введите id");
-                    if (routeDAO.delete(Integer.parseInt(sc.nextLine())) == 15) {
-                        System.out.println("элемент успешно удален");
-                    } else {
-                        System.out.println("нет элемента с таким id");
+                //zalupa polnaya
+                    try {
+                        if (routeDAO.delete(Integer.parseInt(args.get(0))) == 20) {
+                            System.out.println("нет элемента с таким id. введите команду заново с правильным id");
+
+                        } else {
+                            System.out.println("элемент успешно удален");
+
+                        }
+                    } catch (RuntimeException e) {
+                        System.out.println("некорректный ввод");
                     }
-                }
-                catch (RuntimeException e){
-                    System.out.println("некорректный ввод");
-                }
+
             }
         }
     }
@@ -402,6 +394,14 @@ public class Commands {
                 System.out.println(distanceList);
                 distanceList.clear();
             }
+
+        }
+    }
+
+    static class ExecuteScript extends ACommands{
+
+        public void execute(RouteDAO routeDAO) {
+            String scriptName = args.get(0);
 
         }
     }

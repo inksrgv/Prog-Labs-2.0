@@ -147,7 +147,6 @@ class ConsoleReader {
         Scanner sc = new Scanner(System.in);
         String command = sc.nextLine().trim();
         //TODO разбивать строку на название команды и id / имя скрипта который надо экзекьют
-        Map<String, String> ids = new HashMap<>();
 
         if (command.isEmpty()){
             throw new EmptyInputException();
