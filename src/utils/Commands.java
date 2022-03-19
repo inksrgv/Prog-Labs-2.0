@@ -1,5 +1,4 @@
 package utils;
-
 import dao.*;
 import file.FileReader;
 import file.FileWriter;
@@ -26,7 +25,7 @@ abstract class ACommands {
     }
     public void execute(RouteDAO routeDAO){ }
 }
-
+//TODO экзекьют общая ошибка
 /**
  * Главный класс команд, в котором мы обозначаем строковое название команды и класс, за который отвечает эта команда
  */
@@ -150,7 +149,7 @@ public class Commands {
             System.out.println(routeDAO.getCollection().toString());
         }
     }
-
+    //TODO красивый вывод
     /**
      *Класс, предназначенный для добавления элемента в коллекцию
      */
@@ -462,7 +461,6 @@ public class Commands {
                     System.out.println("для просмотра второй части подарка введите cringe");
                 }
             }
-            }
         }
-
+    }
 }
