@@ -12,9 +12,8 @@ import java.io.FileInputStream;
 public class FileReader {
 //TODO парашу окружения
     //public void read(RouteDAO routeDAO){
-
     /*
-        try {
+        try { написал егошин
             File csvData = new File("/path/to/csv");
             CSVParser parser = CSVParser.parse(csvData, CSVFormat.RFC4180);
             String pathToFile = System.getenv("PATH_TO_FILE");
@@ -22,8 +21,8 @@ public class FileReader {
                 // переменной нет
             }
 
-            File file = new File(pathToFile);
-            //File file = new File("C:\\Users\\Софья\\OneDrive\\Рабочий стол\\collection.csv");*/
+            File file = new File(pathToFile); тут заканчивается то что написал егошин
+           */
 
     public void read(RouteDAO routeDAO) {
         try {
