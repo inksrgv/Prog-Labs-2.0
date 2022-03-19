@@ -13,7 +13,6 @@ import java.io.FileInputStream;
 public class FileReader {
 //TODO парашу окружения
     //public void read(RouteDAO routeDAO){
-
     /*
         try { написал егошин
             File csvData = new File("/path/to/csv");

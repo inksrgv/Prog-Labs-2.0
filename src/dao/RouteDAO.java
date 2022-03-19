@@ -1,7 +1,5 @@
 package dao;
 
-
-
 import utils.Route;
 import utils.RouteInfo;
 
@@ -9,18 +7,15 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-import static io.ConsoleOutputer.output;
 
 public class RouteDAO implements DAO {
 
     public Deque<Route> collection = new ArrayDeque<>();
     public String initDate = ZonedDateTime.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy : HH.mm.ss"));
 
-
     public void create(Route route) {
         collection.add(route);
     }
-
 
     /**
      * Метод, который позволяет обновить элемент коллекции по его id
@@ -30,8 +25,7 @@ public class RouteDAO implements DAO {
    public void update(int id, RouteInfo routeInfo) {
         for (Route route: collection){
             if (route.getId() == id){
-                route.update(routeInfo);
-            }
+                route.update(routeInfo); }
         }
    }
 
@@ -65,7 +59,6 @@ public class RouteDAO implements DAO {
            routes.put("дата иницализации:", initDate);
 
            //routes.put("описание элементов: ", routeDAO.getCollection());
-
        }
        return routes;
    }
@@ -86,8 +79,12 @@ public class RouteDAO implements DAO {
     * Метод, который позволяет вывести всю коллекцию
     * @return collection
     */
+
    public String getCollection() {
        return collection.toString();
    }
+
+
+
 
 }

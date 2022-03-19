@@ -58,7 +58,6 @@ public class Commands {
             commandsMap.put("surprise", new Rzhaka());
 
         }
-
         /**
          * Добавление на консоль команд
          * @param args
@@ -147,7 +146,7 @@ public class Commands {
             if (routeDAO.getAll().size() == 0) {
                 output("коллекция пустая");
             }
-            System.out.println(routeDAO.getCollection().toString());
+            System.out.println(routeDAO.getCollection());
         }
     }
 
