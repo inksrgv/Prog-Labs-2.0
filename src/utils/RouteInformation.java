@@ -4,7 +4,6 @@ import exceptions.EmptyInputException;
 
 import java.util.*;
 
-
 public interface RouteInformation {
     RouteInfo info();
 }
@@ -134,8 +133,6 @@ class Console implements RouteInformation{
                 System.out.println("неправильный тип данных");
             }
         }
-
-
         return  out;
     }
 
@@ -146,7 +143,6 @@ class ConsoleReader {
     public List<String> reader(){
         Scanner sc = new Scanner(System.in);
         String command = sc.nextLine().trim();
-        //TODO разбивать строку на название команды и id / имя скрипта который надо экзекьют
 
         if (command.isEmpty()){
             throw new EmptyInputException();
