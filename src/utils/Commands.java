@@ -25,7 +25,7 @@ abstract class ACommands {
     }
     public void execute(RouteDAO routeDAO){ }
 }
-//TODO экзекьют общая ошибка
+
 /**
  * Главный класс команд, в котором мы обозначаем строковое название команды и класс, за который отвечает эта команда
  */
@@ -125,7 +125,7 @@ public class Commands {
     }
 
     /**
-     * Класс, предназначенный для вывода информации об элементах коллекции. Вывод осуществляется с помощью команды getDescription.
+     * Класс команды INFO, предназначенный для вывода информации об элементах коллекции. Вывод осуществляется с помощью команды getDescription.
      */
 
     static class Info extends ACommands {
@@ -138,6 +138,9 @@ public class Commands {
             }
         }
     }
+    /**
+     * Класс команды SHOW, предназначенный для показа элементов коллекции
+     */
 
     static class Show extends ACommands {
         @Override
@@ -148,10 +151,11 @@ public class Commands {
             System.out.println(routeDAO.getCollection());
         }
     }
-    //TODO красивый вывод
+
     /**
      *Класс, предназначенный для добавления элемента в коллекцию
      */
+
     static class AddElement extends ACommands {
 
         public void execute(RouteDAO routeDAO) {
@@ -170,7 +174,7 @@ public class Commands {
     }
     /**
      * Класс, предназначенный для обновления элемента по его id.
-     * @param
+     * @param id
      */
 
     static class UpdateById extends ACommands{
@@ -210,7 +214,7 @@ public class Commands {
 
     /**
      * Класс, предназначенный для удаления элемента по его id
-     * @param
+     * @param id
      */
 
     static class RemoveById extends ACommands {
@@ -235,6 +239,10 @@ public class Commands {
         }
     }
 
+    /**
+     * Класс команды CLEAR,предназначенный для очистки коллекции
+     */
+
     static class Clear extends ACommands {
         static List<Integer> distanceList = new ArrayList<>();
         public void execute(RouteDAO routeDAO) {
@@ -252,6 +260,10 @@ public class Commands {
         }
     }
 
+    /**
+     * Класс команды SAVE, предназначенный для сохранения добавленного элемента в коллекцию
+     */
+
     static class Save extends ACommands {
         public void execute(RouteDAO routeDAO) {
             if (routeDAO.getAll().size() == 0) {
@@ -268,6 +280,10 @@ public class Commands {
         }
     }
 
+    /**
+     * Класс команды REMOVE FIRST,предназначенный для удаления первого элемента из коллекции
+     */
+
     static class RemoveFirst extends ACommands {
 
         public void execute(RouteDAO routeDAO) {
@@ -280,6 +296,10 @@ public class Commands {
         }
     }
 
+    /**
+     * Класс команды HEAD,предназначенный для вывода первого элемента коллекции на консоль
+     */
+
     static class Head extends ACommands {
         public void execute(RouteDAO routeDAO) {
             if (routeDAO.getAll().size() == 0) {
@@ -289,6 +309,11 @@ public class Commands {
             }
         }
     }
+
+    /**
+     * Класс команды PRINT UNIQUE DISTANCE, предназначенный для вывода значения поля distance
+     * return distance
+     */
 
     static class PrintUniqueDistance extends ACommands {
         static Set<Integer> distanceSet = new HashSet<>();
@@ -306,12 +331,20 @@ public class Commands {
         }
     }
 
+    /**
+     * Класс команты EXIT, предназначенный для выхода из консольного приложения и остановки работы программы
+     */
+
     static class Exit extends ACommands {
         public void execute(RouteDAO routeDAO) {
             System.out.println("пока.");
             System.exit(0);
         }
     }
+
+    /**
+     * Класс команты ADD IF MIN, предназанченный для добавлению в коллекцию элемента, который является наименьшим
+     */
 
     static class AddIfMin extends ACommands {
         static List<Integer> distanceList = new ArrayList<>();
@@ -356,6 +389,11 @@ public class Commands {
         }
     }
 
+    /**
+     * Класс команды PRINT ASCENDING DISTANCE, предназначенный для вывода всех значения поля в порядке возрастания
+     * @param distance
+     */
+
     static class PrintAscendingDistance extends ACommands {
         static List<Integer> distanceList = new ArrayList<>();
         public void execute(RouteDAO routeDAO) {
@@ -375,6 +413,11 @@ public class Commands {
 
         }
     }
+
+    /**
+     * Класс команды PRINT DESCENDING DISTANCE, предназначенный для вывода всех значения поля в порядке убывания
+     * @param distance
+     */
 
     static class PrintDescendingDistance extends ACommands {
         static List<Integer> distanceList = new ArrayList<>();
@@ -396,6 +439,10 @@ public class Commands {
         }
     }
 
+    /**
+     * Класс команды EXECUTE SCRIPT, предназначенный для считывания и исполнения скрипта, введённого пользователем
+     */
+
     static class ExecuteScript extends ACommands{
 
         public void execute(RouteDAO routeDAO) {
@@ -403,6 +450,10 @@ public class Commands {
 
         }
     }
+
+    /**
+     * Класс команды RZHAKA, предназначенный для мемного троллинга нашего чудесного преподавателя Алеши Егошина
+     */
 
     static class Rzhaka extends ACommands {
 
