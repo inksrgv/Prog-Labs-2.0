@@ -2,6 +2,8 @@ package dao;
 
 
 
+import utils.FileChecker;
+import utils.FileSaver;
 import utils.Route;
 import utils.RouteInfo;
 
@@ -15,6 +17,7 @@ public class RouteDAO implements DAO {
 
     public Deque<Route> collection = new ArrayDeque<>();
     public String initDate = ZonedDateTime.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy : HH.mm.ss"));
+    FileSaver fileSaver = new FileSaver();
 
 
     public void create(Route route) {
@@ -88,6 +91,20 @@ public class RouteDAO implements DAO {
     */
    public String getCollection() {
        return collection.toString();
+   }
+
+   public void executeScript(String nameOfFile){
+       FileChecker fileChecker = new FileChecker(fileSaver);
+
+//      Создаете новый объект ридера комманд, чтоб он из файла который вы передаете параметром считал и исполнил комманды\
+       if (fileChecker.checkFileInList(nameOfFile)) {
+           fileSaver.save(nameOfFile);
+//           ридер начинает считывать команды с файлa
+
+       }else{
+           System.out.println("Ебать ты даун) Иди учи математику 3 класс))))");
+       }
+       fileSaver.взять коллекцию.clear();
    }
 
 }

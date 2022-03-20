@@ -13,7 +13,6 @@ import java.nio.charset.StandardCharsets;
  */
 public class FileWriter {
     File file = new File("C:\\Users\\Софья\\OneDrive\\Рабочий стол\\collection.csv");
-
     /**
      * Метод записи данных о коллекции в файл
      * @param routeDAO

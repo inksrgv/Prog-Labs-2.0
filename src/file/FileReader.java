@@ -13,6 +13,9 @@ import java.io.FileInputStream;
 public class FileReader {
 //TODO парашу окружения
     public void read(RouteDAO routeDAO){
+        Map<String,String> listOfEnvs = System.getenv();
+        String nameOfFile = list.get("USERNAME");
+
     /*
     }
         try {

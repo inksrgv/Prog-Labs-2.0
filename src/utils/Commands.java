@@ -26,7 +26,7 @@ abstract class ACommands {
     }
     public void execute(RouteDAO routeDAO){ }
 }
-
+//TODO генерация ид
 /**
  * Главный класс команд, в котором мы обозначаем строковое название команды и класс, за который отвечает эта команда
  */
@@ -35,6 +35,7 @@ public class Commands {
     static Scanner sc = new Scanner(System.in);
     static Console console = new Console();
     static FileReader fileReader = new FileReader();
+    FileSaver fileSaver = new FileSaver();
 
     private static class CommandSaver {
         public static final Map<String, ACommands> commandsMap = new LinkedHashMap<>();
@@ -369,6 +370,15 @@ public class Commands {
     static class PrintAscendingDistance extends ACommands {
         static List<Integer> distanceList = new ArrayList<>();
         public void execute(RouteDAO routeDAO) {
+
+
+
+
+
+
+
+
+
             for (Route route : routeDAO.getAll()) {
                 distanceList.add(route.getDistance());
             }
@@ -464,5 +474,15 @@ public class Commands {
             }
             }
         }
+
+//        Execute
+        static class ExecuteScript extends ACommands{
+    public void execute(RouteDAO routeDAO){
+//
+        routeDAO.executeScript(вот стюда передать имя файла с командной строки, когда вводите параметр);
+
+
+    }
+}
 
 }
