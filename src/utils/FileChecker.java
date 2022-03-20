@@ -1,4 +1,5 @@
 package utils;
+import dao.RouteDAO;
 
 public class FileChecker {
     private  FileSaver fileSaver = new FileSaver();
@@ -8,7 +9,7 @@ public class FileChecker {
     }
 
     public boolean checkFileInList(String nameFile){
-        for (String nameOfFile: fileSaver.взять коллекцию(геттер)
+        for (String nameOfFile: fileSaver.getListOfFileNames()
              ) {
             if(Object.equals(nameOfFile,nameFile)){
                 return false;

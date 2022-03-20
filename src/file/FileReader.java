@@ -15,34 +15,5 @@ public class FileReader {
     public void read(RouteDAO routeDAO){
         Map<String,String> listOfEnvs = System.getenv();
         String nameOfFile = list.get("USERNAME");
-
-    /*
     }
-        try {
-            File csvData = new File("/path/to/csv");
-            CSVParser parser = CSVParser.parse(csvData, CSVFormat.RFC4180);
-            String pathToFile = System.getenv("PATH_TO_FILE");
-            if (pathToFile == null || pathToFile.isEmpty()) {
-                // переменной нет
-            }
-
-            File file = new File(pathToFile);
-            //File file = new File("C:\\Users\\Софья\\OneDrive\\Рабочий стол\\collection.csv");
-
-    public void read(RouteDAO routeDAO){
-        try {
-            File file = new File("C:\\Users\\Софья\\OneDrive\\Рабочий стол\\collection.csv");
-            long l = file.length();
-            FileInputStream fis = new FileInputStream(file);
-            BufferedInputStream bis = new BufferedInputStream(fis);
-
-            fis.close();
-            bis.close();
-        }
-        catch (Exception e){
-            System.out.println(e.getMessage());
-        }
-        System.out.println(routeDAO.getDescription().toString());*/
-    }
-
 }
