@@ -3,24 +3,27 @@ package file;
 import dao.RouteDAO;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVPrinter;
 
 import java.io.*;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import libraries.*;
+
 
 /**
  * Класс, который позволяет осуществлять корректную запись данных в файл
  */
 public class FileWriter {
         public static void main(String[] args)
+
         {
-            File file = new File("C:\\Users\\Софья\\OneDrive\\Рабочий стол\\collection.csv");
-            CSVWriter writer = new CSVWriter(new FileWriter(csv));
-            CSVParser parser = CSVParser.parse(csvData, CSVFormat.RFC4180);
+            File csvData = new File("C:\\Users\\Софья\\OneDrive\\Рабочий стол\\collection.csv");
+            CSVPrinter writer = new CSVPrinter(new FileWriter(csv));
+            CSVParser parser = CSVParser.parse(csvData, Charset.defaultCharset(), CSVFormat.RFC4180); //ругается что нет try/catch
             String pathToFile = System.getenv("C:\\Users\\Софья\\OneDrive\\Рабочий стол\\collection.csv");
             if !(pathToFile == null || pathToFile.isEmpty()) {
             //Create record
-            String [] record = dao.RouteDAO.collection;
+            String [] record = dao.RouteDAO.getCollection(); //ругается потому что эта часть кода в статическом болке инициализации
             //Write the record to file
             writer.writeNext(record);
             //close the writer
