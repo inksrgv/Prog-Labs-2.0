@@ -1,15 +1,32 @@
 package file;
 
 import dao.RouteDAO;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import libraries.*;
 
 /**
  * Класс, который позволяет осуществлять корректную запись данных в файл
  */
 public class FileWriter {
-    File file = new File("C:\\Users\\Софья\\OneDrive\\Рабочий стол\\collection.csv");
+        public static void main(String[] args)
+        {
+            File file = new File("C:\\Users\\Софья\\OneDrive\\Рабочий стол\\collection.csv");
+            CSVWriter writer = new CSVWriter(new FileWriter(csv));
+            CSVParser parser = CSVParser.parse(csvData, CSVFormat.RFC4180);
+            String pathToFile = System.getenv("C:\\Users\\Софья\\OneDrive\\Рабочий стол\\collection.csv");
+            if !(pathToFile == null || pathToFile.isEmpty()) {
+            //Create record
+            String [] record = dao.RouteDAO.collection;
+            //Write the record to file
+            writer.writeNext(record);
+            //close the writer
+            writer.close();
+        }
+    }
 
     /**
      * Метод записи данных о коллекции в файл

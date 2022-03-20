@@ -3,6 +3,7 @@ import dao.*;
 import file.FileReader;
 import file.FileWriter;
 import java.util.*;
+import io.MessageHandler;
 import java.util.List;
 import java.awt.FlowLayout;
 import java.awt.image.BufferedImage;
@@ -443,10 +444,90 @@ public class Commands {
      * Класс команды EXECUTE SCRIPT, предназначенный для считывания и исполнения скрипта, введённого пользователем
      */
 
+
     static class ExecuteScript extends ACommands{
 
         public void execute(RouteDAO routeDAO) {
-            String scriptName = args.get(0);
+            String fileName = args.get(0);
+//            public static final MessageHandler message;
+//            static final Stack <String> stack;
+//    public ExecuteScriptCommand(Controller controller) {
+//                this.controller = controller;
+//                this.stack = new Stack<>();
+//            }
+//
+            @Override
+           public String execute(Parameters parameters); {
+                if (!(parameters instanceof Parameters)) {
+                    throw new RuntimeException("Что-то пошло не так");
+                }
+
+                Parameters executeScriptParameters = (Parameters) parameters;
+
+                if (!stack.contains(executeScriptParameters.fileName)) {
+                    stack.push(executeScriptParameters.fileName);
+                }
+                else {
+                    return "Обнаружено зацикливание";
+                }
+
+               try (Scanner scanner = new Scanner(new InputStreamReader(new FileInputStream(executeScriptParameters.fileName), StandardCharsets.UTF_8))) {
+                    String result = "";
+                    while (scanner.hasNext()) {
+                       String line = scanner.nextLine();
+                       if (line.equals("add_if_max")) {
+                            result += doAddIfMax(scanner) + "\n";
+                        } else if (line.equals("print_ascending")) {
+                           String printAscending = controller.printAscending();
+                            result += printAscending + "\n";
+                        } else if (line.contains("count_by_mood")) {
+                            result += doCountByMood(line) + "\n";
+                        } else if (line.contains("filter_greater_than_mood")) {
+                            result += doFilterGreaterThanMood(line) + "\n";
+                        } else if (line.equals("add")) {
+                            result += doAdd(scanner) + "\n";
+                        } else if (line.equals("clear")) {
+                            String clear = controller.clear();
+                            result += clear + "\n";
+                        } else if (line.equals("info")){
+                            String info = controller.info();
+                            result += info + "\n";
+                        } else if (line.equals("show")) {
+                            String show = controller.show();
+                            result += show + "\n";
+                        } else if (line.equals("help")) {
+                            String help = controller.help();
+                            result += help + "\n";
+                        } else if (line.contains("update")) {
+                            result += doUpdate(line, scanner) + "\n";
+                        } else if (line.contains("remove_by_id")) {
+                            result += doRemoveById(line) + "\n";
+                        } else if (line.contains("remove_lower")) {
+                            result += doRemoveLower(scanner) + "\n";
+                        } else if (line.contains("execute_script")){
+                            if (line.length()<16){
+                                throw new ExecuteScriptException("Вы забыли ввести fileName.");
+                            }
+                            String fileName = line.substring(15);
+                            String executeScript = controller.executeScript(fileName);
+                            result += executeScript + "\n";
+                        } else {
+                            throw new ExecuteScriptException("Такой команды не существует");
+                        }
+                    }
+                    stack.pop();
+                    return result;
+                } catch (ExecuteScriptException e) {
+                    stack.pop();
+                    return "Скрипт содержит ошибки. Выполнение скрипта прервано:\n" + e.getMessage();
+                   } catch (FileNotFoundException e) {
+                    stack.pop();
+                   return "Файл с таким именем не существует:\n" + e.getMessage();
+               } catch (Exception e) {
+                    stack.pop();
+                    return "Непредвиденная ошибка чтения из файла:\n" + e.getMessage();
+                }
+            }
 
         }
     }
