@@ -1,9 +1,16 @@
 package utils;
+
 import dao.*;
+import exceptions.EmptyInputException;
+import execute.ExecuteReader;
 import file.FileReader;
 import file.FileWriter;
+import utils.loc.ACommands;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
-import io.MessageHandler;
 import java.util.List;
 import java.awt.FlowLayout;
 import java.awt.image.BufferedImage;
@@ -19,25 +26,31 @@ import static io.ConsoleOutputer.output;
 /**
  * Абстрактный класс команд, в котором прописаны основные параметры класса
  */
-abstract class ACommands {
-    protected List<String> args;
-    protected void addArgs(List<String> args) {
-        this.args = args;
-    }
-    public void execute(RouteDAO routeDAO){ }
-}
+//abstract class ACommands {
+//    protected List<String> args;
+//    protected void addArgs(List<String> args) {
+//        this.args = args;
+//    }
+//    public void execute(RouteDAO routeDAO){ }
+//}
 
 /**
  * Главный класс команд, в котором мы обозначаем строковое название команды и класс, за который отвечает эта команда
  */
 public class Commands {
+
+    static RouteDAO dao = new RouteDAO();
+
     static FileWriter writer = new FileWriter();
     static Scanner sc = new Scanner(System.in);
     static Console console = new Console();
     static FileReader fileReader = new FileReader();
+    static FileSaver fileSaver = new FileSaver();
+
 
     private static class CommandSaver {
         public static final Map<String, ACommands> commandsMap = new LinkedHashMap<>();
+
         static {
             commandsMap.put("help", new Help());
             commandsMap.put("info", new Info());
@@ -47,7 +60,7 @@ public class Commands {
             commandsMap.put("remove_by_id", new RemoveById());
             commandsMap.put("clear", new Clear());
             commandsMap.put("save", new Save());
-            commandsMap.put("execute_script", new ExecuteScript()); //написан только скелет и считывание имени скрипта из строки
+            //execute script
             commandsMap.put("exit", new Exit());
             commandsMap.put("remove_first", new RemoveFirst());
             commandsMap.put("head", new Head());
@@ -56,17 +69,19 @@ public class Commands {
             commandsMap.put("print_field_ascending_distance", new PrintAscendingDistance());
             commandsMap.put("print_field_descending_distance", new PrintDescendingDistance());
             commandsMap.put("surprise", new Rzhaka());
+            commandsMap.put("execute_script", new ExecuteScript());
 
         }
+
         /**
          * Добавление на консоль команд
-         * @param args
+         * @param input
          * @return command
          */
-        public static ACommands getCommand(List<String> args) {
-            ACommands command = commandsMap.get(args.get(0));
-            args.remove(0);
-            command.addArgs(args);
+        public static ACommands getCommand(List<String> input) {
+            ACommands command = commandsMap.get(input.get(0));
+            input.remove(0);
+            command.addArgs(input);
             return command;
         }
     }
@@ -75,7 +90,7 @@ public class Commands {
      * Метод для запуска программы. Вывод на консоль начала работы программы.
      */
     public static void runApp() {
-        RouteDAO dao = new RouteDAO();
+//        RouteDAO dao = new RouteDAO();
         ACommands commands;
         ConsoleReader consoleReader = new ConsoleReader();
         System.out.println("\t\t\t\t\t▒██░░░─░▄█▀▄─░▐█▀▄──░▄█▀▄─     ▒█▀▀ \n" +
@@ -106,7 +121,7 @@ public class Commands {
             System.out.println("info: вывести в стандартный поток вывода информацию о коллекции (тип, дата инициализации, количество элементов и т.д.) ");
             System.out.println("show: " + "вывести в стандартный поток вывода все элементы коллекции в строковом представлении ");
             System.out.println("add {element} : " + "добавить новый элемент в коллекцию ");
-            System.out.println("update_by_id {element} : " + "обновить значение элемента коллекции, id которого равен заданному ");
+            System.out.println("update id {element} : " + "обновить значение элемента коллекции, id которого равен заданному ");
             System.out.println("remove_by_id id :" + "удалить элемент из коллекции по его id ");
             System.out.println("clear :  " + "очистить коллекцию ");
             System.out.println("save: " + "сохранить колекцию в файл ");
@@ -126,7 +141,7 @@ public class Commands {
     }
 
     /**
-     * Класс команды INFO, предназначенный для вывода информации об элементах коллекции. Вывод осуществляется с помощью команды getDescription.
+     * Класс, предназначенный для вывода информации об элементах коллекции. Вывод осуществляется с помощью команды getDescription.
      */
 
     static class Info extends ACommands {
@@ -135,13 +150,10 @@ public class Commands {
             if (Objects.equals(routeDAO.getDescription().toString(), "{}")) {
                 System.out.println("коллекция пустая. нечего показывать");
             } else {
-                fileReader.read(routeDAO);
+                fileReader.read();
             }
         }
     }
-    /**
-     * Класс команды SHOW, предназначенный для показа элементов коллекции
-     */
 
     static class Show extends ACommands {
         @Override
@@ -149,14 +161,13 @@ public class Commands {
             if (routeDAO.getAll().size() == 0) {
                 output("коллекция пустая");
             }
-            System.out.println(routeDAO.getCollection());
+            System.out.println(routeDAO.getCollection().toString());
         }
     }
 
     /**
      *Класс, предназначенный для добавления элемента в коллекцию
      */
-
     static class AddElement extends ACommands {
 
         public void execute(RouteDAO routeDAO) {
@@ -175,74 +186,77 @@ public class Commands {
     }
     /**
      * Класс, предназначенный для обновления элемента по его id.
-     * @param id
+     * @param
      */
-
+    //TODO сделать так чтобы вводилось update_by_id (число) и это число считывалось как id
+    // (также относится к remove_by_id, execute_script)
     static class UpdateById extends ACommands{
 
         public void execute(RouteDAO routeDAO) {
 
-            int idFromConcole = Integer.parseInt(args.get(0));
+
             if (routeDAO.getAll().size() == 0) {
                 System.out.println("коллекция пустая. нечего обновлять");
             }
-            else {
+            else
+            {
+                System.out.println("введите id");
+                int id = 0;
+                try
+                {
+                    id = Integer.parseInt(sc.nextLine());
+                } catch (RuntimeException e) {
+                    output("введите тип данных int");
+                }
 
                 boolean flag = false;
 
-                    for (Route route : routeDAO.getAll()) {
-                        if (route.getId() == idFromConcole) {
-                            flag = true;
-                            break;
-                        }
+                for (Route route : routeDAO.getAll())
+                {
+                    if (route.getId() == id) {
+                        flag = true;
                         break;
                     }
-
-                if (!flag) {
-                    System.out.println("элемента с таким id нет. ведите команду заново с валидным id");
-                } else {
-                    try {
-                        RouteInfo info = console.info();
-                        routeDAO.update(idFromConcole, info);
-                    } catch (RuntimeException e) {
-                        output("неверный ввод");
-                    }
-                    output("элемент коллекции обновлен");
                 }
+                if (!flag) {
+                    System.out.println("элемента с таким id нет. ведите другой id");
+                }
+
+                try {
+                    RouteInfo info = console.info();
+                    routeDAO.update(id,info);
+                } catch (RuntimeException e) {
+                    output("неверный ввод");
+                }
+                output("элемент коллекции обновлен");
             }
         }
     }
 
     /**
      * Класс, предназначенный для удаления элемента по его id
-     * @param id
+     * @param
      */
-
+    //TODO сделать цикл чтобы пока не введет правильный id не заканчивалась команда
     static class RemoveById extends ACommands {
         public void execute(RouteDAO routeDAO) {
             if (routeDAO.getAll().size() == 0) {
                 System.out.println("коллекция пустая. нечего удалять");
             } else {
-                //zalupa polnaya
-                    try {
-                        if (routeDAO.delete(Integer.parseInt(args.get(0))) == 20) {
-                            System.out.println("нет элемента с таким id. введите команду заново с правильным id");
-
-                        } else {
-                            System.out.println("элемент успешно удален");
-
-                        }
-                    } catch (RuntimeException e) {
-                        System.out.println("некорректный ввод");
+                try {
+                    System.out.println("введите id");
+                    if (routeDAO.delete(Integer.parseInt(sc.nextLine())) == 15) {
+                        System.out.println("элемент успешно удален");
+                    } else {
+                        System.out.println("нет элемента с таким id");
                     }
-
+                }
+                catch (RuntimeException e){
+                    System.out.println("некорректный ввод");
+                }
             }
         }
     }
-
-    /**
-     * Класс команды CLEAR,предназначенный для очистки коллекции
-     */
 
     static class Clear extends ACommands {
         static List<Integer> distanceList = new ArrayList<>();
@@ -261,10 +275,6 @@ public class Commands {
         }
     }
 
-    /**
-     * Класс команды SAVE, предназначенный для сохранения добавленного элемента в коллекцию
-     */
-
     static class Save extends ACommands {
         public void execute(RouteDAO routeDAO) {
             if (routeDAO.getAll().size() == 0) {
@@ -281,10 +291,6 @@ public class Commands {
         }
     }
 
-    /**
-     * Класс команды REMOVE FIRST,предназначенный для удаления первого элемента из коллекции
-     */
-
     static class RemoveFirst extends ACommands {
 
         public void execute(RouteDAO routeDAO) {
@@ -297,10 +303,6 @@ public class Commands {
         }
     }
 
-    /**
-     * Класс команды HEAD,предназначенный для вывода первого элемента коллекции на консоль
-     */
-
     static class Head extends ACommands {
         public void execute(RouteDAO routeDAO) {
             if (routeDAO.getAll().size() == 0) {
@@ -310,11 +312,6 @@ public class Commands {
             }
         }
     }
-
-    /**
-     * Класс команды PRINT UNIQUE DISTANCE, предназначенный для вывода значения поля distance
-     * return distance
-     */
 
     static class PrintUniqueDistance extends ACommands {
         static Set<Integer> distanceSet = new HashSet<>();
@@ -332,20 +329,12 @@ public class Commands {
         }
     }
 
-    /**
-     * Класс команты EXIT, предназначенный для выхода из консольного приложения и остановки работы программы
-     */
-
     static class Exit extends ACommands {
         public void execute(RouteDAO routeDAO) {
             System.out.println("пока.");
             System.exit(0);
         }
     }
-
-    /**
-     * Класс команты ADD IF MIN, предназанченный для добавлению в коллекцию элемента, который является наименьшим
-     */
 
     static class AddIfMin extends ACommands {
         static List<Integer> distanceList = new ArrayList<>();
@@ -390,11 +379,6 @@ public class Commands {
         }
     }
 
-    /**
-     * Класс команды PRINT ASCENDING DISTANCE, предназначенный для вывода всех значения поля в порядке возрастания
-     * @param distance
-     */
-
     static class PrintAscendingDistance extends ACommands {
         static List<Integer> distanceList = new ArrayList<>();
         public void execute(RouteDAO routeDAO) {
@@ -415,11 +399,6 @@ public class Commands {
         }
     }
 
-    /**
-     * Класс команды PRINT DESCENDING DISTANCE, предназначенный для вывода всех значения поля в порядке убывания
-     * @param distance
-     */
-
     static class PrintDescendingDistance extends ACommands {
         static List<Integer> distanceList = new ArrayList<>();
         public void execute(RouteDAO routeDAO) {
@@ -439,102 +418,6 @@ public class Commands {
 
         }
     }
-
-    /**
-     * Класс команды EXECUTE SCRIPT, предназначенный для считывания и исполнения скрипта, введённого пользователем
-     */
-
-
-    static class ExecuteScript extends ACommands{
-
-        public void execute(RouteDAO routeDAO) {
-            String fileName = args.get(0);
-//            public static final MessageHandler message;
-//            static final Stack <String> stack;
-//    public ExecuteScriptCommand(Controller controller) {
-//                this.controller = controller;
-//                this.stack = new Stack<>();
-//            }
-//
-            @Override
-           public String execute(Parameters parameters); {
-                if (!(parameters instanceof Parameters)) {
-                    throw new RuntimeException("Что-то пошло не так");
-                }
-
-                Parameters executeScriptParameters = (Parameters) parameters;
-
-                if (!stack.contains(executeScriptParameters.fileName)) {
-                    stack.push(executeScriptParameters.fileName);
-                }
-                else {
-                    return "Обнаружено зацикливание";
-                }
-
-               try (Scanner scanner = new Scanner(new InputStreamReader(new FileInputStream(executeScriptParameters.fileName), StandardCharsets.UTF_8))) {
-                    String result = "";
-                    while (scanner.hasNext()) {
-                       String line = scanner.nextLine();
-                       if (line.equals("add_if_max")) {
-                            result += doAddIfMax(scanner) + "\n";
-                        } else if (line.equals("print_ascending")) {
-                           String printAscending = controller.printAscending();
-                            result += printAscending + "\n";
-                        } else if (line.contains("count_by_mood")) {
-                            result += doCountByMood(line) + "\n";
-                        } else if (line.contains("filter_greater_than_mood")) {
-                            result += doFilterGreaterThanMood(line) + "\n";
-                        } else if (line.equals("add")) {
-                            result += doAdd(scanner) + "\n";
-                        } else if (line.equals("clear")) {
-                            String clear = controller.clear();
-                            result += clear + "\n";
-                        } else if (line.equals("info")){
-                            String info = controller.info();
-                            result += info + "\n";
-                        } else if (line.equals("show")) {
-                            String show = controller.show();
-                            result += show + "\n";
-                        } else if (line.equals("help")) {
-                            String help = controller.help();
-                            result += help + "\n";
-                        } else if (line.contains("update")) {
-                            result += doUpdate(line, scanner) + "\n";
-                        } else if (line.contains("remove_by_id")) {
-                            result += doRemoveById(line) + "\n";
-                        } else if (line.contains("remove_lower")) {
-                            result += doRemoveLower(scanner) + "\n";
-                        } else if (line.contains("execute_script")){
-                            if (line.length()<16){
-                                throw new ExecuteScriptException("Вы забыли ввести fileName.");
-                            }
-                            String fileName = line.substring(15);
-                            String executeScript = controller.executeScript(fileName);
-                            result += executeScript + "\n";
-                        } else {
-                            throw new ExecuteScriptException("Такой команды не существует");
-                        }
-                    }
-                    stack.pop();
-                    return result;
-                } catch (ExecuteScriptException e) {
-                    stack.pop();
-                    return "Скрипт содержит ошибки. Выполнение скрипта прервано:\n" + e.getMessage();
-                   } catch (FileNotFoundException e) {
-                    stack.pop();
-                   return "Файл с таким именем не существует:\n" + e.getMessage();
-               } catch (Exception e) {
-                    stack.pop();
-                    return "Непредвиденная ошибка чтения из файла:\n" + e.getMessage();
-                }
-            }
-
-        }
-    }
-
-    /**
-     * Класс команды RZHAKA, предназначенный для мемного троллинга нашего чудесного преподавателя Алеши Егошина
-     */
 
     static class Rzhaka extends ACommands {
 
@@ -592,6 +475,77 @@ public class Commands {
                     System.out.println("для просмотра второй части подарка введите cringe");
                 }
             }
+            }
         }
+
+//        Execute
+    static class ExecuteScript extends ACommands{
+
+    public void execute(RouteDAO routeDAO){
+
+        String nameOfScript = args.get(0);
+        if (ExecuteReader.checkNameOfFileInList(nameOfScript)){
+            ExecuteReader.listOfNamesOfScripts.add(nameOfScript);
+            try{
+
+                List<String> listOfCommands =  Files.readAllLines(Paths.get(nameOfScript + ".txt").toAbsolutePath());
+                for (String lineOfFile: listOfCommands
+                ) {
+                    ACommands commands;
+                    String command = lineOfFile.trim();
+                    Map<String, String> ids = new HashMap<>();
+
+                    if (command.isEmpty()){
+                        throw new EmptyInputException();
+                    }
+                    List<String> args = new ArrayList<>(Arrays.asList(command.split(" ")));
+                    try {
+                        commands = CommandSaver.getCommand(args);
+                        commands.execute(dao);
+                    } catch (RuntimeException e) {
+                        System.out.println("Введённой вами команды не существует. Попробуйте ввести другую команду.");
+                    }
+                }
+            } catch (IOException e) {
+                System.out.printf("Все пошло по пизде");
+                e.printStackTrace();
+            }
+            ExecuteReader.listOfNamesOfScripts.clear();
+        }else{
+            System.out.println("рекурсия");
+        }
+
+//        ACommands commands;
+//
+//        while (true) {
+//            try {
+//                commands = CommandSaver.getCommand(consoleReader.reader());
+//                commands.execute(dao);
+//            } catch (RuntimeException e) {
+//                System.out.println("Введённой вами команды не существует. Попробуйте ввести другую команду.");
+//            }
+//        }
+
+
+//        String nameOfFile = args.get(0);
+//
+//        FileChecker fileChecker = new FileChecker(fileSaver);
+
+
+//      Создаете новый объект ридера команд, чтоб он из файла который вы передаете параметром считал и исполнил команды\
+//        if (fileChecker.checkFileInList(nameOfFile)) {
+//            fileSaver.save(nameOfFile);
+//           ридер начинает считывать команды с файлa
+//
+//        }else{
+//            System.out.println("Ебать ты даун) Иди учи математику 3 класс))))");
+//        }
+
+        //todo это
+        //fileSaver.взять коллекцию.clear();
+
+
     }
+}
+
 }
