@@ -50,7 +50,7 @@ public class Commands {
             commandsMap.put("remove_by_id", new RemoveById());
             commandsMap.put("clear", new Clear());
             commandsMap.put("save", new Save());
-            //execute script
+            commandsMap.put("execute_script", new ExecuteScript());
             commandsMap.put("exit", new Exit());
             commandsMap.put("remove_first", new RemoveFirst());
             commandsMap.put("head", new Head());
@@ -150,7 +150,7 @@ public class Commands {
             if (routeDAO.getAll().size() == 0) {
                 output("коллекция пустая");
             }
-            System.out.println(routeDAO.getCollection().toString());
+            System.out.println(routeDAO.getCollection());
         }
     }
 
@@ -177,32 +177,22 @@ public class Commands {
      * Класс, предназначенный для обновления элемента по его id.
      * @param
      */
-    //TODO сделать так чтобы вводилось update_by_id (число) и это число считывалось как id
-    // (также относится к remove_by_id, execute_script)
     static class UpdateById extends ACommands{
 
         public void execute(RouteDAO routeDAO) {
 
-
+            int idFromConcole = Integer.parseInt(args.get(0));
             if (routeDAO.getAll().size() == 0) {
                 System.out.println("коллекция пустая. нечего обновлять");
             }
             else
             {
-                System.out.println("введите id");
-                int id = 0;
-                try
-                {
-                    id = Integer.parseInt(sc.nextLine());
-                } catch (RuntimeException e) {
-                    output("введите тип данных int");
-                }
 
                 boolean flag = false;
 
                 for (Route route : routeDAO.getAll())
                 {
-                    if (route.getId() == id) {
+                    if (route.getId() == idFromConcole) {
                         flag = true;
                         break;
                     }
@@ -213,7 +203,7 @@ public class Commands {
 
                 try {
                     RouteInfo info = console.info();
-                    routeDAO.update(id,info);
+                    routeDAO.update(idFromConcole,info);
                 } catch (RuntimeException e) {
                     output("неверный ввод");
                 }
@@ -226,23 +216,25 @@ public class Commands {
      * Класс, предназначенный для удаления элемента по его id
      * @param
      */
-    //TODO сделать цикл чтобы пока не введет правильный id не заканчивалась команда
+
     static class RemoveById extends ACommands {
         public void execute(RouteDAO routeDAO) {
             if (routeDAO.getAll().size() == 0) {
                 System.out.println("коллекция пустая. нечего удалять");
             } else {
+
                 try {
-                    System.out.println("введите id");
-                    if (routeDAO.delete(Integer.parseInt(sc.nextLine())) == 15) {
-                        System.out.println("элемент успешно удален");
+                    if (routeDAO.delete(Integer.parseInt(args.get(0))) == 20) {
+                        System.out.println("нет элемента с таким id. введите команду заново с правильным id");
+
                     } else {
-                        System.out.println("нет элемента с таким id");
+                        System.out.println("элемент успешно удален");
+
                     }
-                }
-                catch (RuntimeException e){
+                } catch (RuntimeException e) {
                     System.out.println("некорректный ввод");
                 }
+
             }
         }
     }

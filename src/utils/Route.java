@@ -70,16 +70,18 @@ public class Route {
 
     public void setDistance(int distance){this.distance = distance;}
 
+    public String initDate = ZonedDateTime.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy : HH.mm.ss"));
 
     @Override
     public String toString(){
-        return "Route" + System.lineSeparator() +
+        return System.lineSeparator()+
                 "id: " + id + System.lineSeparator() +
                 "name: " + name + System.lineSeparator() +
                 "coordinates: " + coordinates.toString() + System.lineSeparator() +
                 "location (from): " + from.toString() + System.lineSeparator() +
                 "location (to): " + to.toString() + System.lineSeparator() +
-                "distance: " + distance.toString() ;
+                "distance: " + distance.toString() + System.lineSeparator() +
+                "creation date: " + String.format(initDate, "dd.MM.yyy: HH.mm.ss") + System.lineSeparator() ;
     }
 
     public void update(RouteInfo routeInfo){
@@ -92,7 +94,7 @@ public class Route {
 
     RouteDAO routeDAO = new RouteDAO();
     public Deque<Route> collection = new ArrayDeque<>();
-    public String initDate = ZonedDateTime.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+    //public String initDate = ZonedDateTime.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
 
     /*public Map<String, String> getDescription() {
         Map<String, String> routes = new LinkedHashMap<>();

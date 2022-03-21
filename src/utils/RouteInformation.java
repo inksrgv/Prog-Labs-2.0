@@ -13,7 +13,6 @@ class Console implements RouteInformation{
 
     Scanner sc = new Scanner(System.in);
     RouteInfo out = new RouteInfo();
-    //List<RouteInfo> routeInfos = new ArrayList<>();
 
     public RouteInfo info() {
 
@@ -135,7 +134,6 @@ class Console implements RouteInformation{
             }
         }
 
-
         return  out;
     }
 
@@ -146,8 +144,6 @@ class ConsoleReader {
     public List<String> reader(){
         Scanner sc = new Scanner(System.in);
         String command = sc.nextLine().trim();
-        //TODO разбивать строку на название команды и id / имя скрипта который надо экзекьют
-        Map<String, String> ids = new HashMap<>();
 
         if (command.isEmpty()){
             throw new EmptyInputException();
