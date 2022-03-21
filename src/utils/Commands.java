@@ -1,8 +1,12 @@
 package utils;
 
 import dao.*;
+import exceptions.EmptyInputException;
 import file.FileReader;
 import file.FileWriter;
+
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.List;
 import java.awt.FlowLayout;
@@ -34,7 +38,7 @@ public class Commands {
     static FileWriter writer = new FileWriter();
     static Scanner sc = new Scanner(System.in);
     static Console console = new Console();
-    static FileReader fileReader = new FileReader();
+    static RouteDAO dao = new RouteDAO();
     static FileSaver fileSaver = new FileSaver();
 
 
@@ -64,6 +68,7 @@ public class Commands {
 
         /**
          * Добавление на консоль команд
+         *
          * @param input
          * @return command
          */
@@ -79,12 +84,12 @@ public class Commands {
      * Метод для запуска программы. Вывод на консоль начала работы программы.
      */
     public static void runApp() {
-        RouteDAO dao = new RouteDAO();
+        //RouteDAO dao = new RouteDAO();
         ACommands commands;
         ConsoleReader consoleReader = new ConsoleReader();
         System.out.println("\t\t\t\t\t▒██░░░─░▄█▀▄─░▐█▀▄──░▄█▀▄─     ▒█▀▀ \n" +
                 "\t\t\t\t\t▒██░░░░▐█▄▄▐█░▐█▀▀▄░▐█▄▄▐█     ▒▀▀▄ \n" +
-                "\t\t\t\t\t▒██▄▄█░▐█─░▐█░▐█▄▄▀░▐█─░▐█     ▒▄▄▀ " );
+                "\t\t\t\t\t▒██▄▄█░▐█─░▐█░▐█▄▄▀░▐█─░▐█     ▒▄▄▀ ");
         System.out.println("\t\t\t\t\t\tNika and Sofia production\n");
         System.out.println("Для того чтобы начать введите команду. Чтобы увидеть список доступных команд введите help");
         while (true) {
@@ -137,9 +142,9 @@ public class Commands {
 
         public void execute(RouteDAO routeDAO) {
 
-                //fileReader.read();
-                output(routeDAO.getDescription());
-            
+            //fileReader.read();
+            output(routeDAO.getDescription());
+
         }
     }
 
@@ -154,7 +159,7 @@ public class Commands {
     }
 
     /**
-     *Класс, предназначенный для добавления элемента в коллекцию
+     * Класс, предназначенный для добавления элемента в коллекцию
      */
     static class AddElement extends ACommands {
 
@@ -172,25 +177,24 @@ public class Commands {
             output("элемент добавлен в коллекцию");
         }
     }
+
     /**
      * Класс, предназначенный для обновления элемента по его id.
+     *
      * @param
      */
-    static class UpdateById extends ACommands{
+    static class UpdateById extends ACommands {
 
         public void execute(RouteDAO routeDAO) {
 
             int idFromConcole = Integer.parseInt(args.get(0));
             if (routeDAO.getAll().size() == 0) {
                 System.out.println("коллекция пустая. нечего обновлять");
-            }
-            else
-            {
+            } else {
 
                 boolean flag = false;
 
-                for (Route route : routeDAO.getAll())
-                {
+                for (Route route : routeDAO.getAll()) {
                     if (route.getId() == idFromConcole) {
                         flag = true;
                         break;
@@ -202,7 +206,7 @@ public class Commands {
 
                 try {
                     RouteInfo info = console.info();
-                    routeDAO.update(idFromConcole,info);
+                    routeDAO.update(idFromConcole, info);
                 } catch (RuntimeException e) {
                     output("неверный ввод");
                 }
@@ -213,6 +217,7 @@ public class Commands {
 
     /**
      * Класс, предназначенный для удаления элемента по его id
+     *
      * @param
      */
 
@@ -240,6 +245,7 @@ public class Commands {
 
     static class Clear extends ACommands {
         static List<Integer> distanceList = new ArrayList<>();
+
         public void execute(RouteDAO routeDAO) {
             if (routeDAO.getAll().size() == 0) {
                 System.out.println("невозможно очистить пустую коллекцию");
@@ -296,13 +302,12 @@ public class Commands {
 
     static class PrintUniqueDistance extends ACommands {
         static Set<Integer> distanceSet = new HashSet<>();
+
         public void execute(RouteDAO routeDAO) {
             if (routeDAO.getAll().size() == 0) {
                 System.out.println("коллекция пустая. нечего выводить");
-            }
-            else
-            {
-                for (Route route1 : routeDAO.getAll()){
+            } else {
+                for (Route route1 : routeDAO.getAll()) {
                     distanceSet.add(route1.getDistance());
                 }
                 System.out.println("уникальные значения поля distance: " + distanceSet.toString());
@@ -319,6 +324,7 @@ public class Commands {
 
     static class AddIfMin extends ACommands {
         static List<Integer> distanceList = new ArrayList<>();
+
         public void execute(RouteDAO routeDAO) {
             if (routeDAO.getAll().size() == 0) {
                 System.out.println("коллекция пустая, не с чем сравнивать");
@@ -329,12 +335,11 @@ public class Commands {
                             distanceList.add(route.getDistance());
                         }
                         Collections.sort(distanceList);
-                        if (distanceList.get(0) == 2){
+                        if (distanceList.get(0) == 2) {
                             System.out.println("в коллекции уже содержится элемент с минимальным допустимым значением сравниваемого поля");
                             distanceList.clear();
                             break;
-                        }
-                        else {
+                        } else {
                             RouteInfo info = console.info();
                             if (info.distance < distanceList.get(0)) {
                                 Route route = new Route(info.name, info.x, info.y, info.fromX,
@@ -362,6 +367,7 @@ public class Commands {
 
     static class PrintAscendingDistance extends ACommands {
         static List<Integer> distanceList = new ArrayList<>();
+
         public void execute(RouteDAO routeDAO) {
             for (Route route : routeDAO.getAll()) {
                 distanceList.add(route.getDistance());
@@ -382,6 +388,7 @@ public class Commands {
 
     static class PrintDescendingDistance extends ACommands {
         static List<Integer> distanceList = new ArrayList<>();
+
         public void execute(RouteDAO routeDAO) {
             for (Route route : routeDAO.getAll()) {
                 distanceList.add(route.getDistance());
@@ -427,8 +434,8 @@ public class Commands {
                     e.printStackTrace();
                 }
             }
-                System.out.println("но это только первая часть подарка. чтобы увидеть вторую введите cringe");
-            while(true) {
+            System.out.println("но это только первая часть подарка. чтобы увидеть вторую введите cringe");
+            while (true) {
                 if (Objects.equals(sc.nextLine(), "cringe")) {
                     try {
                         File file = new File("C:\\Users\\Софья\\OneDrive\\Изображения\\a.jpg");
@@ -456,30 +463,45 @@ public class Commands {
                     System.out.println("для просмотра второй части подарка введите cringe");
                 }
             }
+        }
+    }
+
+    static class ExecuteScript extends ACommands {
+
+        public void execute(RouteDAO routeDAO) {
+
+            String nameOfScript = args.get(0);
+            if (ExecuteReader.checkNameOfFileInList(nameOfScript)) {
+                ExecuteReader.listOfNamesOfScripts.add(nameOfScript);
+                try {
+
+                    List<String> listOfCommands = Files.readAllLines(Paths.get(nameOfScript + ".txt").toAbsolutePath());
+                    for (String lineOfFile : listOfCommands
+                    ) {
+                        ACommands commands;
+                        String command = lineOfFile.trim();
+                        Map<String, String> ids = new HashMap<>();
+
+                        if (command.isEmpty()) {
+                            throw new EmptyInputException();
+                        }
+                        List<String> args = new ArrayList<>(Arrays.asList(command.split(" ")));
+                        /*try {
+                            commands = CommandSaver.getCommand(args);
+                            commands.execute(dao);
+                        } catch (RuntimeException e) {
+                            System.out.println("Введённой вами команды не существует. Попробуйте ввести другую команду.");
+                        }*/
+                    }
+                } catch (IOException e) {
+                    System.out.printf("Все пошло по пизде");
+                    e.printStackTrace();
+                }
+                ExecuteReader.listOfNamesOfScripts.clear();
+            } else {
+                System.out.println("рекурсия");
             }
         }
 
-//        Execute
-    static class ExecuteScript extends ACommands{
-    public void execute(RouteDAO routeDAO){
-        String nameOfFile = args.get(0);
-
-        FileChecker fileChecker = new FileChecker(fileSaver);
-
-//      Создаете новый объект ридера команд, чтоб он из файла который вы передаете параметром считал и исполнил команды\
-        if (fileChecker.checkFileInList(nameOfFile)) {
-            fileSaver.save(nameOfFile);
-//           ридер начинает считывать команды с файлa
-
-        }else{
-            System.out.println("Ебать ты даун) Иди учи математику 3 класс))))");
-        }
-
-        //todo это
-        //fileSaver.взять коллекцию.clear();
-
-
     }
-}
-
 }
