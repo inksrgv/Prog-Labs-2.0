@@ -62,7 +62,7 @@ public class Commands {
             commandsMap.put("print_unique_distance", new PrintUniqueDistance());
             commandsMap.put("print_field_ascending_distance", new PrintAscendingDistance());
             commandsMap.put("print_field_descending_distance", new PrintDescendingDistance());
-            commandsMap.put("surprise", new Rzhaka());
+            commandsMap.put("secret_command_only_for_alex_egoshin", new Rzhaka());
 
         }
 
@@ -128,7 +128,7 @@ public class Commands {
             System.out.println("print_unique_distance : " + "вывести уникальные значения поля distance всех элементов в коллекции ");
             System.out.println("print_field_ascending_distance :  " + "вывести значения поля distance всех элементов в порядке возрастания ");
             System.out.println("print_field_descending_distance :  вывести значения поля distance всех элементов в порядке убывания ");
-            System.out.println("surprise: не скажу что это такое хихи, узнай экспериментальным путем");
+            System.out.println("secret_command_only_for_alex_egoshin: новая попытка защиты, новый сюрприз специально только для alex_egosin!!!");
 
         }
 
@@ -412,7 +412,7 @@ public class Commands {
         public void execute(RouteDAO routeDAO) {
             while (true) {
                 try {
-                    File file = new File("C:\\Users\\Софья\\OneDrive\\Изображения\\подарок.jpg");
+                    File file = new File("C:\\Users\\Софья\\Downloads\\trollingAlexEgichin.jpg");
                     BufferedImage bufferedImage = ImageIO.read(file);
 
                     ImageIcon imageIcon = new ImageIcon(bufferedImage);
@@ -420,9 +420,9 @@ public class Commands {
 
                     jFrame.setLayout(new FlowLayout());
 
-                    jFrame.setSize(500, 500);
+                    jFrame.setSize(1200, 700);
                     JLabel jLabel = new JLabel();
-
+                    jLabel.setText("НЕ ЗАКРЫВАЙ ПОЖАЛУЙСТА КАРТИНКУ ИНАЧЕ ПРОГРАММА СКАЖЕТ ПОКА ");
                     jLabel.setIcon(imageIcon);
                     jFrame.add(jLabel);
                     jFrame.setVisible(true);
@@ -486,20 +486,20 @@ public class Commands {
                             throw new EmptyInputException();
                         }
                         List<String> args = new ArrayList<>(Arrays.asList(command.split(" ")));
-                        /*try {
+                        try {
                             commands = CommandSaver.getCommand(args);
                             commands.execute(dao);
                         } catch (RuntimeException e) {
-                            System.out.println("Введённой вами команды не существует. Попробуйте ввести другую команду.");
-                        }*/
+                            System.out.println("ты норм? в скрипте параша написана, переделывай");
+                        }
                     }
                 } catch (IOException e) {
-                    System.out.printf("Все пошло по пизде");
+                    System.out.printf("Все пошло по пизде, чекай мать: " + System.lineSeparator());
                     e.printStackTrace();
                 }
                 ExecuteReader.listOfNamesOfScripts.clear();
             } else {
-                System.out.println("рекурсия");
+                System.out.println("пу пу пу.... обнаружена рекурсия");
             }
         }
 
