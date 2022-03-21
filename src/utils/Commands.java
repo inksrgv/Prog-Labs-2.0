@@ -26,7 +26,7 @@ abstract class ACommands {
     }
     public void execute(RouteDAO routeDAO){ }
 }
-//TODO генерация ид
+
 /**
  * Главный класс команд, в котором мы обозначаем строковое название команды и класс, за который отвечает эта команда
  */
@@ -35,7 +35,8 @@ public class Commands {
     static Scanner sc = new Scanner(System.in);
     static Console console = new Console();
     static FileReader fileReader = new FileReader();
-    FileSaver fileSaver = new FileSaver();
+    static FileSaver fileSaver = new FileSaver();
+
 
     private static class CommandSaver {
         public static final Map<String, ACommands> commandsMap = new LinkedHashMap<>();
@@ -138,7 +139,7 @@ public class Commands {
             if (Objects.equals(routeDAO.getDescription().toString(), "{}")) {
                 System.out.println("коллекция пустая. нечего показывать");
             } else {
-                fileReader.read(routeDAO);
+                fileReader.read();
             }
         }
     }
@@ -370,15 +371,6 @@ public class Commands {
     static class PrintAscendingDistance extends ACommands {
         static List<Integer> distanceList = new ArrayList<>();
         public void execute(RouteDAO routeDAO) {
-
-
-
-
-
-
-
-
-
             for (Route route : routeDAO.getAll()) {
                 distanceList.add(route.getDistance());
             }
@@ -476,10 +468,23 @@ public class Commands {
         }
 
 //        Execute
-        static class ExecuteScript extends ACommands{
+    static class ExecuteScript extends ACommands{
     public void execute(RouteDAO routeDAO){
-//
-        routeDAO.executeScript(вот стюда передать имя файла с командной строки, когда вводите параметр);
+        String nameOfFile = args.get(0);
+
+        FileChecker fileChecker = new FileChecker(fileSaver);
+
+//      Создаете новый объект ридера команд, чтоб он из файла который вы передаете параметром считал и исполнил команды\
+        if (fileChecker.checkFileInList(nameOfFile)) {
+            fileSaver.save(nameOfFile);
+//           ридер начинает считывать команды с файлa
+
+        }else{
+            System.out.println("Ебать ты даун) Иди учи математику 3 класс))))");
+        }
+
+        //todo это
+        //fileSaver.взять коллекцию.clear();
 
 
     }

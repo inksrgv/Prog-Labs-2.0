@@ -15,6 +15,10 @@ public class Location {
 
     public float getToY() {return  y;}
 
+    public String getName() {
+        return name;
+    }
+
     @Override
     public String toString() {
         return "Location{" +

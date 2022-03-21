@@ -12,7 +12,27 @@ import java.nio.charset.StandardCharsets;
  * Класс, который позволяет осуществлять корректную запись данных в файл
  */
 public class FileWriter {
-    File file = new File("C:\\Users\\Софья\\OneDrive\\Рабочий стол\\collection.csv");
+//<<<<<<< Updated upstream
+    File file = new File("D:\\collection.csv");
+//=======
+//        public static void main(String[] args)
+//
+//        {
+//            File csvData = new File("C:\\Users\\Софья\\OneDrive\\Рабочий стол\\collection.csv");
+//            CSVPrinter writer = new CSVPrinter(new FileWriter(csv));
+//            CSVParser parser = CSVParser.parse(csvData, Charset.defaultCharset(), CSVFormat.RFC4180); //ругается что нет try/catch
+//            String pathToFile = System.getenv("C:\\Users\\Софья\\OneDrive\\Рабочий стол\\collection.csv");
+//            if (!(pathToFile == null || pathToFile.isEmpty())) {
+//            //Create record
+//            String [] record = dao.RouteDAO.getCollection(); //ругается потому что эта часть кода в статическом болке инициализации
+//            //Write the record to file
+//            writer.writeNext(record);
+//            //close the writer
+//            writer.close();
+//        }
+//    }
+//
+//>>>>>>> Stashed changes
     /**
      * Метод записи данных о коллекции в файл
      * @param routeDAO
@@ -24,7 +44,7 @@ public class FileWriter {
             }
             FileOutputStream fos = new FileOutputStream(file);
 
-            String toBeWritten = (routeDAO.getDescription().toString());
+            String toBeWritten = (routeDAO.getDescription());
 
             fos.write(toBeWritten.getBytes(StandardCharsets.UTF_8));
 

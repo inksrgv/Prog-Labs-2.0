@@ -10,8 +10,7 @@ public interface DAO {
     void create(Route route);
     void update(int id, RouteInfo routeInfo);
     int delete(int id);
-    Route get(int id);
     Deque<Route> getAll();
     int clear();
-    Map<String, String> getDescription();
+    //Map<String, String> getDescription();
 }

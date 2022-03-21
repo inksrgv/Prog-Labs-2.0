@@ -15,6 +15,9 @@ public class Location {
 
     public Long getFromY(){return y;}
 
+    public String getName() {
+        return name;
+    }
     @Override
     public String toString() {
         return "Location{" +

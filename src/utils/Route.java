@@ -19,6 +19,11 @@ public class Route {
     private utils.loc.Location to; //Поле может быть null
     private Integer distance; //Поле не может быть null, Значение поля должно быть больше 1
 
+    public String getDescription() {
+        return id + "," + name + "," + coordinates.getCoorX() + "," + coordinates.getCoorY() + "," + creationDate + "," + from.getFromX() + "," + from.getFromY() + "," +
+                from.getName() + "," + to.getToX() + "," + to.getToY() + "," + to.getName() + "," + distance;
+    }
+
     public Route(String name, double coordinatesX, Double coordinatesY, double fromX, Long fromY, String nameFrom, int toX, float toY, String nameTo, Integer distance ){
         this.id = IdGenerator.nextId();
         this.name = name;
@@ -26,14 +31,14 @@ public class Route {
         this.from = new Location(fromX, fromY, nameFrom);
         this.to = new utils.loc.Location(toX, toY, nameTo);
         this.distance = distance;
-
+        this.creationDate = ZonedDateTime.now();
     }
 
-    public Route(RouteInfo information){
+    public Route(RouteInfo information) {
         id = IdGenerator.nextId();
         name = information.name;
         coordinates = new Coordinates(information.x, information.y);
-        creationDate = ZonedDateTime.now();
+        creationDate = ZonedDateTime.parse(information.creationDate);
         from = new Location(information.fromX, information.fromY, information.nameFrom);
         to = new utils.loc.Location(information.toX, information.toY, information.nameTo);
         distance = information.distance;

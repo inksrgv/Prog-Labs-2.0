@@ -7,6 +7,8 @@ public class FileSaver {
     public void save(String nameOfFile){
         this.listOfFileNames.add(nameOfFile);
     }
+
+
     public ArrayList<String> getListOfFileNames(){
         return this.listOfFileNames ;
     }

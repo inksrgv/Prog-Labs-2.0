@@ -43,14 +43,14 @@ public class RouteDAO implements DAO {
        return 20;
    }
 
-   public Route get(int id) {
+   /*public Route get(int id) {
        for (Route route : collection){
            if (route.getId() == id){
                return route;
            }
        }
        return null;
-   }
+   }*/
 
    public Deque<Route> getAll() {
        return new ArrayDeque<>(collection);
@@ -58,19 +58,23 @@ public class RouteDAO implements DAO {
 
    public int clear(){collection.clear(); return 0;}
 
-   public Map<String, String> getDescription() {
-       Map<String, String> routes = new LinkedHashMap<>();
-       for (Route route : collection){
-           routes.put("тип:", collection.getClass().getSimpleName());
+   public String getDescription() {
+//       Map<String, String> routes = new LinkedHashMap<>();
+//       for (Route route : collection){
+//           routes.put("тип:", collection.getClass().getSimpleName());
+//
+//           routes.put("размер:", String.valueOf(collection.size()));
+//
+//           routes.put("дата иницализации:", initDate);
+//
+//           //routes.put("описание элементов: ", routeDAO.getCollection());
+//
+//       }
+       String out = "";
+       for (Route route: collection)
+           out += route.getDescription() + "," + initDate + System.lineSeparator();
 
-           routes.put("размер:", String.valueOf(collection.size()));
-
-           routes.put("дата иницализации:", initDate);
-
-           //routes.put("описание элементов: ", routeDAO.getCollection());
-
-       }
-       return routes;
+       return out;
    }
 
    public String printFirst(){
@@ -93,18 +97,5 @@ public class RouteDAO implements DAO {
        return collection.toString();
    }
 
-   public void executeScript(String nameOfFile){
-       FileChecker fileChecker = new FileChecker(fileSaver);
-
-//      Создаете новый объект ридера комманд, чтоб он из файла который вы передаете параметром считал и исполнил комманды\
-       if (fileChecker.checkFileInList(nameOfFile)) {
-           fileSaver.save(nameOfFile);
-//           ридер начинает считывать команды с файлa
-
-       }else{
-           System.out.println("Ебать ты даун) Иди учи математику 3 класс))))");
-       }
-       fileSaver.взять коллекцию.clear();
-   }
 
 }
