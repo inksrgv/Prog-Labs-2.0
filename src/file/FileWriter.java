@@ -12,7 +12,7 @@ import java.nio.charset.StandardCharsets;
  * Класс, который позволяет осуществлять корректную запись данных в файл
  */
 public class FileWriter {
-//<<<<<<< Updated upstream
+
     File file = new File("D:\\collection.csv");
 //=======
 //        public static void main(String[] args)
@@ -32,7 +32,7 @@ public class FileWriter {
 //        }
 //    }
 //
-//>>>>>>> Stashed changes
+
     /**
      * Метод записи данных о коллекции в файл
      * @param routeDAO
