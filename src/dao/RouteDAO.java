@@ -59,20 +59,10 @@ public class RouteDAO implements DAO {
    public int clear(){collection.clear(); return 0;}
 
    public String getDescription() {
-//       Map<String, String> routes = new LinkedHashMap<>();
-//       for (Route route : collection){
-//           routes.put("тип:", collection.getClass().getSimpleName());
-//
-//           routes.put("размер:", String.valueOf(collection.size()));
-//
-//           routes.put("дата иницализации:", initDate);
-//
-//           //routes.put("описание элементов: ", routeDAO.getCollection());
-//
-//       }
-       String out = "";
+
+       String out = "тип:"+ collection.getClass().getSimpleName() + "," + "размер:"+ String.valueOf(collection.size()) + System.lineSeparator()  ;
        for (Route route: collection)
-           out += route.getDescription() + "," + initDate + System.lineSeparator();
+           out += route.getDescription() + "," + "creation date: " + initDate + System.lineSeparator();
 
        return out;
    }

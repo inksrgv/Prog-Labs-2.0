@@ -136,10 +136,11 @@ public class Commands {
     static class Info extends ACommands {
 
         public void execute(RouteDAO routeDAO) {
-            if (Objects.equals(routeDAO.getDescription().toString(), "{}")) {
+            if (Objects.equals(routeDAO.getDescription(), "{}")) {
                 System.out.println("коллекция пустая. нечего показывать");
             } else {
-                fileReader.read();
+                //fileReader.read();
+                output(routeDAO.getDescription());
             }
         }
     }

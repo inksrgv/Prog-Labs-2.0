@@ -20,8 +20,9 @@ public class Route {
     private Integer distance; //Поле не может быть null, Значение поля должно быть больше 1
 
     public String getDescription() {
-        return id + "," + name + "," + coordinates.getCoorX() + "," + coordinates.getCoorY() + "," + creationDate + "," + from.getFromX() + "," + from.getFromY() + "," +
-                from.getName() + "," + to.getToX() + "," + to.getToY() + "," + to.getName() + "," + distance;
+        return "id:" + id + "," + "name: "+ name + "," + "coordinates: (" + coordinates.getCoorX() + "," + coordinates.getCoorY() + ") "+ "," + "location (from): " + " (" + from.getFromX() + "," + from.getFromY() + ","
+                +
+                from.getName() +") " + "," + "location(to): " + " (" + to.getToX() + "," + to.getToY() + "," + to.getName() + ") "+","+"distance: " + distance;
     }
 
     public Route(String name, double coordinatesX, Double coordinatesY, double fromX, Long fromY, String nameFrom, int toX, float toY, String nameTo, Integer distance ){
