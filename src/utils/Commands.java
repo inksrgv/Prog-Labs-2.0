@@ -2,7 +2,7 @@ package utils;
 
 import dao.*;
 import exceptions.EmptyInputException;
-import file.FileReader;
+import exceptions.ExitException;
 import file.FileWriter;
 
 import java.nio.file.Files;
@@ -39,7 +39,7 @@ public class Commands {
     static Scanner sc = new Scanner(System.in);
     static Console console = new Console();
     static RouteDAO dao = new RouteDAO();
-    static FileSaver fileSaver = new FileSaver();
+
 
 
     private static class CommandSaver {
@@ -83,8 +83,7 @@ public class Commands {
     /**
      * Метод для запуска программы. Вывод на консоль начала работы программы.
      */
-    public static void runApp() {
-        //RouteDAO dao = new RouteDAO();
+    public static void run() {
         ACommands commands;
         ConsoleReader consoleReader = new ConsoleReader();
         System.out.println("\t\t\t\t\t▒██░░░─░▄█▀▄─░▐█▀▄──░▄█▀▄─     ▒█▀▀ \n" +
@@ -96,8 +95,22 @@ public class Commands {
             try {
                 commands = CommandSaver.getCommand(consoleReader.reader());
                 commands.execute(dao);
-            } catch (RuntimeException e) {
+            } catch (NullPointerException e) {
                 System.out.println("Введённой вами команды не существует. Попробуйте ввести другую команду.");
+            }
+            catch (NoSuchElementException e){ throw new ExitException("пока............");}
+        }
+    }
+
+    public static void runApp(){
+        output("введите команду");
+        while (true){
+            try{
+                run();
+            }
+            catch (ExitException e){
+                System.out.println(e.getMessage());
+                break;
             }
         }
     }
@@ -318,7 +331,12 @@ public class Commands {
     static class Exit extends ACommands {
         public void execute(RouteDAO routeDAO) {
             System.out.println("пока.");
-            System.exit(0);
+            try {
+                System.exit(0);
+            }
+            catch (NoSuchElementException e){
+                throw new ExitException("пока..............");
+            }
         }
     }
 
