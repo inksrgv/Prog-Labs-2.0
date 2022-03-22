@@ -22,10 +22,7 @@ public class Route {
     private Integer distance; //Поле не может быть null, Значение поля должно быть больше 1
 
     public String getDescription() {
-        /*return "id:" + id + "," + "name: "+ name + "," + "coordinates: (" + coordinates.getCoorX() + "," + coordinates.getCoorY() + ") "+ "," + "location (from): " + " (" + from.getFromX() + "," + from.getFromY() + ","
-                +
-                from.getName() +") " + "," + "location(to): " + " (" + to.getToX() + "," + to.getToY() + "," + to.getName() + ") "+","+"distance: " + distance;*/
-         return id + "," + name + ","  + coordinates.getCoorX() + "," + coordinates.getCoorY() + "," + creationDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy : HH.mm.ss")) + "," + from.getFromX() + "," + from.getFromY() + ","
+        return id + "," + name + ","  + coordinates.getCoorX() + "," + coordinates.getCoorY() + "," + creationDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy : HH.mm.ss")) + "," + from.getFromX() + "," + from.getFromY() + ","
                 +
                 from.getName() + "," +  + to.getToX() + "," + to.getToY() + "," + to.getName()+","+ distance;
     }
@@ -41,7 +38,7 @@ public class Route {
     }
 
     public Route(RouteInfo information) {
-        id = information.id;
+        id = IdGenerator.nextId();
         name = information.name;
         coordinates = new Coordinates(information.x, information.y);
         LocalDate date = LocalDate.parse(information.creationDate, DateTimeFormatter.ofPattern("dd.MM.yyyy : HH.mm.ss"));
@@ -54,6 +51,8 @@ public class Route {
     public int getId() { return id; }
 
     public int getDistance(){return distance;}
+
+    //private final String date = creationDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy : HH.mm.ss"));
 
     @Override
     public String toString(){
@@ -74,22 +73,6 @@ public class Route {
         to = new utils.loc.Location(routeInfo.toX, routeInfo.toY, routeInfo.nameTo);
         distance = routeInfo.distance;
     }
-
-
-    /*public Map<String, String> getDescription() {
-        Map<String, String> routes = new LinkedHashMap<>();
-        for (Route route : routeDAO.getAll()){
-            routes.put("тип:", collection.getClass().getSimpleName());
-
-            routes.put("размер:", String.valueOf(collection.size()));
-
-            routes.put("дата иницализации:", String.format(initDate, "dd.MM.yyy: HH.mm.ss"));
-
-            routes.put("описание элементов: ", routeDAO.getCollection());
-
-        }
-        return routes;
-    }*/
 }
 
 class IdGenerator{

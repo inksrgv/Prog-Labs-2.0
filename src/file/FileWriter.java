@@ -44,9 +44,9 @@ public class FileWriter {
             System.out.println("не удалось сохранить: "+e.getMessage());
         }
     }
-    public void clear(){
-        file.delete();
-    }
+    //public void clear(){
+        //file.;
+    //}
 
     private static void save(RouteDAO dao, String fileName) throws IOException{
 

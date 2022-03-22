@@ -54,11 +54,8 @@ public class FileReader {
                 String line = lines.get(i);
                 List<String> lineSplit = Arrays.asList(line.split(","));
                 if (i == 0)
-                {
-                    //String type = lineSplit.get(1);
-                    //String size = lineSplit.get(2);
                     dao.initDate = lineSplit.get(0);
-                }
+
                 else {
                     RouteInfo info = new RouteInfo(lineSplit);
                     dao.create(new Route(info));

@@ -176,7 +176,8 @@ public class Commands {
             if (routeDAO.getAll().size() == 0) {
                 output("коллекция пустая");
             }
-            System.out.println(routeDAO.getCollection());
+            else
+                System.out.println(routeDAO.getCollection());
         }
     }
 
@@ -210,6 +211,7 @@ public class Commands {
         public void execute(RouteDAO routeDAO) {
 
             int idFromConcole = Integer.parseInt(args.get(0));
+
             if (routeDAO.getAll().size() == 0) {
                 System.out.println("коллекция пустая. нечего обновлять");
             } else {
@@ -222,17 +224,18 @@ public class Commands {
                         break;
                     }
                 }
-                if (!flag) {
+                if (!flag)
                     System.out.println("элемента с таким id нет. ведите другой id");
+                else {
+                    try {
+                        RouteInfo info = console.info();
+                        routeDAO.update(idFromConcole, info);
+                    } catch (RuntimeException e) {
+                        output("неверный ввод");
+                    }
+                    output("элемент коллекции обновлен");
                 }
 
-                try {
-                    RouteInfo info = console.info();
-                    routeDAO.update(idFromConcole, info);
-                } catch (RuntimeException e) {
-                    output("неверный ввод");
-                }
-                //output("элемент коллекции обновлен");
             }
         }
     }
@@ -278,6 +281,8 @@ public class Commands {
                 for (Route route : routeDAO.getAll()) {
                     distanceList.add(route.getDistance());
                 }
+                for (int i = 1; i < routeDAO.getAll().size() + 1; i++)
+                    routeDAO.delete(i);
                 routeDAO.clear();
                 distanceList.clear();
                 output("коллекция очищена");

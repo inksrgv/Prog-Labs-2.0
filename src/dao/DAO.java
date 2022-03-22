@@ -11,6 +11,6 @@ public interface DAO {
     void update(int id, RouteInfo routeInfo);
     int delete(int id);
     Deque<Route> getAll();
-    int clear();
+    void clear();
     //Map<String, String> getDescription();
 }

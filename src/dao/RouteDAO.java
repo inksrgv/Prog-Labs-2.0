@@ -15,8 +15,10 @@ import static io.ConsoleOutputer.output;
 
 public class RouteDAO implements DAO {
 
-    private Deque<Route> collection = new ArrayDeque<>();
+    private final Deque<Route> collection = new ArrayDeque<>();
+
     public String initDate = ZonedDateTime.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy : HH.mm.ss"));
+
 
     public void create(Route route) {
         collection.add(route);
@@ -52,7 +54,9 @@ public class RouteDAO implements DAO {
        return new ArrayDeque<>(collection);
    }
 
-   public int clear(){collection.clear(); return 0;}
+   public void clear(){
+       collection.clear();
+   }
 
    public String getDescription() {
 
@@ -80,13 +84,16 @@ public class RouteDAO implements DAO {
     * @return collection
     */
    public String getCollection() {
-       return collection.toString();
+       String out = " ";
+       for (Route route: collection)
+           out += route.toString() + System.lineSeparator();
+       return(out);
    }
 
     @Override
     public String toString() {
-        return "RouteDAO{" + "type:"+ collection.getClass().getSimpleName() + "," + "size: "+ collection.size() +"," +
-                "initDate='" + initDate + '\'' +
+        return "Route{" + "type: "+ collection.getClass().getSimpleName() + "," + "size: "+ collection.size() +"," +
+                "initDate: " + initDate + '\'' +
                 '}';
     }
 }
