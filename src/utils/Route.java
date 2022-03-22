@@ -2,6 +2,8 @@ package utils;
 
 import dao.RouteDAO;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayDeque;
@@ -20,9 +22,12 @@ public class Route {
     private Integer distance; //Поле не может быть null, Значение поля должно быть больше 1
 
     public String getDescription() {
-        return "id:" + id + "," + "name: "+ name + "," + "coordinates: (" + coordinates.getCoorX() + "," + coordinates.getCoorY() + ") "+ "," + "location (from): " + " (" + from.getFromX() + "," + from.getFromY() + ","
+        /*return "id:" + id + "," + "name: "+ name + "," + "coordinates: (" + coordinates.getCoorX() + "," + coordinates.getCoorY() + ") "+ "," + "location (from): " + " (" + from.getFromX() + "," + from.getFromY() + ","
                 +
-                from.getName() +") " + "," + "location(to): " + " (" + to.getToX() + "," + to.getToY() + "," + to.getName() + ") "+","+"distance: " + distance;
+                from.getName() +") " + "," + "location(to): " + " (" + to.getToX() + "," + to.getToY() + "," + to.getName() + ") "+","+"distance: " + distance;*/
+         return id + "," + name + ","  + coordinates.getCoorX() + "," + coordinates.getCoorY() + "," + creationDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy : HH.mm.ss")) + "," + from.getFromX() + "," + from.getFromY() + ","
+                +
+                from.getName() + "," +  + to.getToX() + "," + to.getToY() + "," + to.getName()+","+ distance;
     }
 
     public Route(String name, double coordinatesX, Double coordinatesY, double fromX, Long fromY, String nameFrom, int toX, float toY, String nameTo, Integer distance ){
@@ -36,10 +41,11 @@ public class Route {
     }
 
     public Route(RouteInfo information) {
-        id = IdGenerator.nextId();
+        id = information.id;
         name = information.name;
         coordinates = new Coordinates(information.x, information.y);
-        creationDate = ZonedDateTime.parse(information.creationDate);
+        LocalDate date = LocalDate.parse(information.creationDate, DateTimeFormatter.ofPattern("dd.MM.yyyy : HH.mm.ss"));
+        creationDate = date.atStartOfDay(ZoneId.systemDefault());
         from = new Location(information.fromX, information.fromY, information.nameFrom);
         to = new utils.loc.Location(information.toX, information.toY, information.nameTo);
         distance = information.distance;
@@ -47,31 +53,7 @@ public class Route {
 
     public int getId() { return id; }
 
-    public String getName() { return name; }
-
-    public Coordinates getCoordinates() { return coordinates; }
-
-    public ZonedDateTime getCreationDate() { return creationDate; }
-
-    public Location getFrom(){return from;}
-
-    public utils.loc.Location getTo(){return to;}
-
     public int getDistance(){return distance;}
-
-    public void setName(String name) { this.name = name; }
-
-    public void setCoordinates(Coordinates coordinates) { this.coordinates = coordinates; }
-
-    public void setCreationDate(ZonedDateTime creationDate) { this.creationDate = creationDate; }
-
-    public void setFrom(Location from){this.from = from;}
-
-    public void setTo(utils.loc.Location to){this.to = to;}
-
-    public void setDistance(int distance){this.distance = distance;}
-
-    public String initDate = ZonedDateTime.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy : HH.mm.ss"));
 
     @Override
     public String toString(){
@@ -82,7 +64,7 @@ public class Route {
                 "location (from): " + from.toString() + System.lineSeparator() +
                 "location (to): " + to.toString() + System.lineSeparator() +
                 "distance: " + distance.toString() + System.lineSeparator() +
-                "creation date: " + String.format(initDate, "dd.MM.yyy: HH.mm.ss") + System.lineSeparator() ;
+                "creation date: " + creationDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy : HH.mm.ss")) + System.lineSeparator() ;
     }
 
     public void update(RouteInfo routeInfo){
@@ -93,9 +75,6 @@ public class Route {
         distance = routeInfo.distance;
     }
 
-    RouteDAO routeDAO = new RouteDAO();
-    public Deque<Route> collection = new ArrayDeque<>();
-    //public String initDate = ZonedDateTime.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
 
     /*public Map<String, String> getDescription() {
         Map<String, String> routes = new LinkedHashMap<>();

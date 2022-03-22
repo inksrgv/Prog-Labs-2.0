@@ -15,16 +15,12 @@ import static io.ConsoleOutputer.output;
 
 public class RouteDAO implements DAO {
 
-    public Deque<Route> collection = new ArrayDeque<>();
+    private Deque<Route> collection = new ArrayDeque<>();
     public String initDate = ZonedDateTime.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy : HH.mm.ss"));
-    FileSaver fileSaver = new FileSaver();
-
 
     public void create(Route route) {
         collection.add(route);
     }
-
-
     /**
      * Метод, который позволяет обновить элемент коллекции по его id
      * @param id - id элемента, который пользователь хочет обновить
@@ -43,14 +39,14 @@ public class RouteDAO implements DAO {
        return 20;
    }
 
-   /*public Route get(int id) {
+   public Route get(int id) {
        for (Route route : collection){
            if (route.getId() == id){
                return route;
            }
        }
        return null;
-   }*/
+   }
 
    public Deque<Route> getAll() {
        return new ArrayDeque<>(collection);
@@ -60,9 +56,9 @@ public class RouteDAO implements DAO {
 
    public String getDescription() {
 
-       String out = "тип:"+ collection.getClass().getSimpleName() + "," + "размер:"+ String.valueOf(collection.size()) + System.lineSeparator()  ;
+       String out = initDate + System.lineSeparator() ;
        for (Route route: collection)
-           out += route.getDescription() + "," + "creation date: " + initDate + System.lineSeparator();
+           out += route.getDescription() + System.lineSeparator();
 
        return out;
    }
@@ -87,5 +83,10 @@ public class RouteDAO implements DAO {
        return collection.toString();
    }
 
-
+    @Override
+    public String toString() {
+        return "RouteDAO{" + "type:"+ collection.getClass().getSimpleName() + "," + "size: "+ collection.size() +"," +
+                "initDate='" + initDate + '\'' +
+                '}';
+    }
 }

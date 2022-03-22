@@ -1,6 +1,7 @@
 package utils;
 
 import exceptions.EmptyInputException;
+import exceptions.ExitException;
 
 import java.util.*;
 
@@ -24,7 +25,8 @@ class Console implements RouteInformation{
                     System.out.println("название не может быть пустым");
                     continue;}
                 break;
-            } catch (RuntimeException e) {
+            }catch (NoSuchElementException e){throw new ExitException(e.getMessage());}
+            catch (RuntimeException e) {
                 System.out.println("введите строку");
             }
         }
@@ -34,6 +36,7 @@ class Console implements RouteInformation{
                 out.x = Double.parseDouble(sc.nextLine());
                 break;
             }
+            catch (NoSuchElementException e){throw new ExitException(e.getMessage());}
             catch (RuntimeException e){
                 System.out.println("введен неправильный тип данных");
 
@@ -50,6 +53,7 @@ class Console implements RouteInformation{
                     break;
                 }
             }
+            catch (NoSuchElementException e){throw new ExitException(e.getMessage());}
             catch (RuntimeException e){
                 System.out.println("введен неправильный тип данных");
             }
@@ -60,6 +64,7 @@ class Console implements RouteInformation{
                 out.fromX = Double.parseDouble(sc.nextLine());
                 break;
             }
+            catch (NoSuchElementException e){throw new ExitException(e.getMessage());}
             catch (RuntimeException e){
                 System.out.println("введен неправильный тип данных");
             }
@@ -70,6 +75,7 @@ class Console implements RouteInformation{
                 out.fromY = Long.parseLong(sc.nextLine());
                 break;
             }
+            catch (NoSuchElementException e){throw new ExitException(e.getMessage());}
             catch (RuntimeException e){
                 System.out.println("введен неправильный тип данных");
             }
@@ -83,7 +89,8 @@ class Console implements RouteInformation{
                     System.out.println("название не может быть пустым");
                     continue;}
                 break;
-            } catch (RuntimeException e) {
+            }catch (NoSuchElementException e){throw new ExitException(e.getMessage());}
+            catch (RuntimeException e) {
                 System.out.println("введите строку");
             }
         }
@@ -94,6 +101,7 @@ class Console implements RouteInformation{
                 out.toX = Integer.parseInt(sc.nextLine());
                 break;
             }
+            catch (NoSuchElementException e){throw new ExitException(e.getMessage());}
             catch (RuntimeException e){
                 System.out.println("введен неправильный тип данных");
             }
@@ -105,6 +113,7 @@ class Console implements RouteInformation{
                 out.toY = Float.parseFloat(sc.nextLine());
                 break;
             }
+            catch (NoSuchElementException e){throw new ExitException(e.getMessage());}
             catch (RuntimeException e){
                 System.out.println("неправильный ввод данных");
             }
@@ -115,6 +124,7 @@ class Console implements RouteInformation{
                 out.nameTo = sc.nextLine();
                 break;
             }
+            catch (NoSuchElementException e){throw new ExitException(e.getMessage());}
             catch (RuntimeException e){
                 System.out.println("неправильный ввод");
             }
@@ -129,12 +139,12 @@ class Console implements RouteInformation{
                 }
                 break;
             }
+            catch (NoSuchElementException e){throw new ExitException(e.getMessage());}
             catch (RuntimeException e){
                 System.out.println("неправильный тип данных");
             }
         }
-
-        return  out;
+        return out;
     }
 
 }

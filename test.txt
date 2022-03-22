@@ -1,1 +1,2 @@
-head
+execute_script pypypy
+execute_script pypypy
