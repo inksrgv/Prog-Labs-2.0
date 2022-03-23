@@ -6,18 +6,18 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class RouteInfo {
-    int id;
-    String name;
-    double x;
-    Double y;
-    String creationDate;
-    double fromX;
-    Long fromY;
-    String nameFrom;
-    int toX;
-    float toY;
-    String nameTo;
-    Integer distance;
+    public int id;
+    public String name;
+    public double x;
+    public Double y;
+    public String creationDate;
+    public double fromX;
+    public Long fromY;
+    public String nameFrom;
+    public int toX;
+    public float toY;
+    public String nameTo;
+    public Integer distance;
 
     public RouteInfo(List<String> data) {
         id = Integer.parseInt(data.get(0));

@@ -6,10 +6,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 
 public class Route {
@@ -73,11 +70,7 @@ public class Route {
         to = new utils.loc.Location(routeInfo.toX, routeInfo.toY, routeInfo.nameTo);
         distance = routeInfo.distance;
     }
+
+
 }
 
-class IdGenerator{
-    public static int id = 1;
-    public static int nextId(){
-        return  id++;
-    }
-}

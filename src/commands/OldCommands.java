@@ -1,66 +1,44 @@
-package utils;
+package commands;
 
-import dao.*;
-import exceptions.EmptyInputException;
-import exceptions.ExitException;
-import file.FileReader;
-import file.FileWriter;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.*;
-import java.util.List;
-import java.awt.FlowLayout;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import static io.ConsoleOutputer.output;
+import static console.ConsoleOutputer.output;
 
 /**
  * Абстрактный класс команд, в котором прописаны основные параметры класса
  */
-abstract class ACommands {
+/*abstract class ACommands {
     protected List<String> args;
     protected void addArgs(List<String> args) {
         this.args = args;
     }
     public void execute(RouteDAO routeDAO){ }
-}
+}*/
 
 /**
  * Главный класс команд, в котором мы обозначаем строковое название команды и класс, за который отвечает эта команда
  */
+/*
 public class Commands {
-    static FileWriter writer = new FileWriter();
-    static Scanner sc = new Scanner(System.in);
-    static Console console = new Console();
     static FileReader reader = new FileReader();
     static RouteDAO dao = reader.read();
 
 
-    /**f
-     * Класс, предназначенный для добавления классов команд
-     */
-    private static class CommandSaver {
+    public class CommandSaver {
         public static final Map<String, ACommands> commandsMap = new LinkedHashMap<>();
 
         static {
-            commandsMap.put("help", new Help());
-            commandsMap.put("info", new Info());
-            commandsMap.put("show", new Show());
-            commandsMap.put("add", new AddElement());
-            commandsMap.put("update_by_id", new UpdateById());
-            commandsMap.put("remove_by_id", new RemoveById());
+            commandsMap.put("help", new Help()); //done
+            commandsMap.put("info", new Info()); //done
+            commandsMap.put("show", new Show()); //done
+            commandsMap.put("add", new Add()); //done
+            commandsMap.put("update_by_id", new UpdateById()); //done
+            commandsMap.put("remove_by_id", new RemoveById()); //done
             commandsMap.put("clear", new Clear());
             commandsMap.put("save", new Save());
             commandsMap.put("execute_script", new ExecuteScript());
             commandsMap.put("exit", new Exit());
             commandsMap.put("remove_first", new RemoveFirst());
             commandsMap.put("head", new Head());
-            commandsMap.put("add_if_min", new AddIfMin());
+            commandsMap.put("add_if_min", new AddIfMin()); //done
             commandsMap.put("print_unique_distance", new PrintUniqueDistance());
             commandsMap.put("print_field_ascending_distance", new PrintAscendingDistance());
             commandsMap.put("print_field_descending_distance", new PrintDescendingDistance());
@@ -74,6 +52,7 @@ public class Commands {
          * @param input
          * @return command
          */
+/*
         public static ACommands getCommand(List<String> input) {
             ACommands command = commandsMap.get(input.get(0));
             input.remove(0);
@@ -85,6 +64,7 @@ public class Commands {
     /**
      * Метод для запуска программы. Вывод на консоль начала работы программы.
      */
+/*
     public static void run() {
 
         ACommands commands;
@@ -111,7 +91,7 @@ public class Commands {
     /**
      * Метод, который предназначен для обработки исключения бесконечного вывода потока
      */
-
+/*
     public static void runApp(){
         while (true){
             try{
@@ -123,11 +103,12 @@ public class Commands {
             }
         }
     }
-
+}*/
+/*
     /**
      * Класс команды HELP, предназначенной для выведения списка команд и их возможностей
      */
-    static class Help extends ACommands {
+    /*static class Help extends ACommands {
 
 
         @Override
@@ -154,23 +135,23 @@ public class Commands {
 
         }
 
-    }
+    }*/
 
     /**
      * Класс команды INFO, предназначенный для вывода информации об элементах коллекции. Вывод осуществляется с помощью команды getDescription.
      */
 
-    static class Info extends ACommands {
+    /*static class Info extends ACommands {
         public void execute(RouteDAO routeDAO) {
             output(routeDAO.toString());
         }
-    }
+    }*/
 
     /**
      * Класс команды SHOW, предназначенный для вывода коллекции на консоль
      */
 
-    static class Show extends ACommands {
+    /*static class Show extends ACommands {
         @Override
         public void execute(RouteDAO routeDAO) {
             if (routeDAO.getAll().size() == 0) {
@@ -179,12 +160,12 @@ public class Commands {
             else
                 System.out.println(routeDAO.getCollection());
         }
-    }
+    }*/
 
     /**
      * Класс команды ADD ELEMENT, предназначенный для добавления элемента в коллекцию
      */
-    static class AddElement extends ACommands {
+    /*static class AddElement extends ACommands {
         public void execute(RouteDAO routeDAO) {
             try {
                 RouteInfo info = console.info();
@@ -199,13 +180,14 @@ public class Commands {
             }
             output("элемент добавлен в коллекцию");
         }
-    }
+    }*/
 
     /**
      * Класс команды UPDATE BY ID, предназначенный для обновления элемента по его id.
      *
      * @param
      */
+    /*
     static class UpdateById extends ACommands {
 
         public void execute(RouteDAO routeDAO) {
@@ -238,7 +220,7 @@ public class Commands {
 
             }
         }
-    }
+    }*/
 
     /**
      * Класс команды REMOVE BY ID, предназначенный для удаления элемента по его id
@@ -246,7 +228,7 @@ public class Commands {
      * @param
      */
 
-    static class RemoveById extends ACommands {
+    /*static class RemoveById extends ACommands {
         public void execute(RouteDAO routeDAO) {
             if (routeDAO.getAll().size() == 0) {
                 System.out.println("коллекция пустая. нечего удалять");
@@ -266,12 +248,12 @@ public class Commands {
 
             }
         }
-    }
+    }*/
 
     /**
      * Класс команды CLEAR, предназначенный для очистки коллекции
      */
-    static class Clear extends ACommands {
+    /*static class Clear extends ACommands {
         static List<Integer> distanceList = new ArrayList<>();
 
         public void execute(RouteDAO routeDAO) {
@@ -288,13 +270,13 @@ public class Commands {
                 output("коллекция очищена");
             }
         }
-    }
+    }*/
 
     /**
      * Класс команды SAVE, предназначенный для сохранения элементов в коллекцию
      */
 
-    static class Save extends ACommands  {
+    /*static class Save extends ACommands  {
 
         public void execute(RouteDAO routeDAO) {
                 try {
@@ -304,13 +286,13 @@ public class Commands {
                     output("не удалось сохранить коллекцию " + e.getMessage());
                 }
         }
-    }
+    }*/
 
     /**
      * Класс команды REMOVE FIRST, предназначенный для удаления первого элемента из коллекции
      */
 
-    static class RemoveFirst extends ACommands {
+    /*static class RemoveFirst extends ACommands {
 
         public void execute(RouteDAO routeDAO) {
             if (routeDAO.getAll().size() == 0) {
@@ -320,13 +302,13 @@ public class Commands {
                 output("первый элемент коллекции успешно удален");
             }
         }
-    }
+    }*/
 
     /**
      * Класс команды HEAD, предназначенный для вывода первого элемента коллекции
      */
 
-    static class Head extends ACommands {
+    /*static class Head extends ACommands {
         public void execute(RouteDAO routeDAO) {
             if (routeDAO.getAll().size() == 0) {
                 System.out.println("пусто...");
@@ -334,13 +316,13 @@ public class Commands {
                 System.out.println(routeDAO.printFirst());
             }
         }
-    }
+    }*/
 
     /**
      * Класс команды PRINT UNIQUE DISTANCE, предназначенный для вывода значения уникального поля distance
      */
 
-    static class PrintUniqueDistance extends ACommands {
+    /*static class PrintUniqueDistance extends ACommands {
         static Set<Integer> distanceSet = new HashSet<>();
 
         public void execute(RouteDAO routeDAO) {
@@ -353,12 +335,12 @@ public class Commands {
                 System.out.println("уникальные значения поля distance: " + distanceSet.toString());
             }
         }
-    }
+    }*/
 
     /**
      * Класс команды EXIT, предназначенный для выхода из выполнения программы
      */
-    static class Exit extends ACommands {
+    /*static class Exit extends ACommands {
         public void execute(RouteDAO routeDAO) {
             System.out.println("пока.");
             try {
@@ -368,13 +350,13 @@ public class Commands {
                 throw new ExitException("пока..............");
             }
         }
-    }
+    }*/
 
     /**
      * Класс команды ADD IF MIN, предназначенный для добавления элементов в коллекцию, если он является наименьшим
      */
 
-    static class AddIfMin extends ACommands {
+    /*static class AddIfMin extends ACommands {
         static List<Integer> distanceList = new ArrayList<>();
 
         public void execute(RouteDAO routeDAO) {
@@ -415,13 +397,13 @@ public class Commands {
                 }
             }
         }
-    }
+    }*/
 
     /**
      * Класс команды PRINT ASCENDING DISTANCE, предназначенный для вывода значений поля distance в порядке возрастания
      */
 
-    static class PrintAscendingDistance extends ACommands {
+    /*static class PrintAscendingDistance extends ACommands {
         static List<Integer> distanceList = new ArrayList<>();
 
         public void execute(RouteDAO routeDAO) {
@@ -440,12 +422,12 @@ public class Commands {
             }
 
         }
-    }
+    }*/
     /**
      * Класс команды PRINT DESCENDING DISTANCE, предназначенный для вывода значений поля distance в порядке убывания
      */
 
-    static class PrintDescendingDistance extends ACommands {
+    /*static class PrintDescendingDistance extends ACommands {
         static List<Integer> distanceList = new ArrayList<>();
 
         public void execute(RouteDAO routeDAO) {
@@ -464,13 +446,13 @@ public class Commands {
             }
 
         }
-    }
+    }*/
 
     /**
      * Класс команды RZHAKA, предназначенный для мемного троллинга
      */
 
-    static class Rzhaka extends ACommands {
+    /*static class Rzhaka extends ACommands {
 
         public void execute(RouteDAO routeDAO) {
             while (true) {
@@ -526,14 +508,14 @@ public class Commands {
                     System.out.println("для просмотра второй части подарка введите cringe");
                 }
             }*/
-        }
-    }
+        //}
+    //}
 
     /**
      * Класс команды EXECUTE SCRIPT, предназначенный для чтения и исполнения скрипта из файла
      */
 
-    static class ExecuteScript extends ACommands {
+    /*static class ExecuteScript extends ACommands {
 
         public void execute(RouteDAO routeDAO) {
 
@@ -570,5 +552,4 @@ public class Commands {
             }
         }
 
-    }
-}
+    }*/

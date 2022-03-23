@@ -1,16 +1,13 @@
-package utils;
+package console;
 
-import exceptions.EmptyInputException;
 import exceptions.ExitException;
+import utils.RouteInfo;
+import utils.RouteInformation;
 
-import java.util.*;
+import java.util.NoSuchElementException;
+import java.util.Scanner;
 
-
-public interface RouteInformation {
-    RouteInfo info();
-}
-
-/*public class Console implements RouteInformation{
+public class Console implements RouteInformation {
 
     Scanner sc = new Scanner(System.in);
     RouteInfo out = new RouteInfo();
@@ -147,21 +144,4 @@ public interface RouteInformation {
         return out;
     }
 
-}*/
-
-
-/*class ConsoleReader {
-    public List<String> reader(){
-        Scanner sc = new Scanner(System.in);
-        String command = sc.nextLine().trim();
-
-        if (command.isEmpty()){
-            throw new EmptyInputException();
-        }
-        public List<String> args = new ArrayList<>(Arrays.asList(command.split(" ")));
-        return args;
-
-    }
-
-}*/
-
+}

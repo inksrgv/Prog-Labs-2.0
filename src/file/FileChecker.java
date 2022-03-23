@@ -1,10 +1,9 @@
-package utils;
-import dao.RouteDAO;
+package file;
 
 import java.util.Objects;
 
 public class FileChecker {
-    private  FileSaver fileSaver = new FileSaver();
+    private FileSaver fileSaver = new FileSaver();
 
     public FileChecker(FileSaver fileSaver){
         this.fileSaver = fileSaver;
