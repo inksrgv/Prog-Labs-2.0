@@ -14,7 +14,8 @@ public class Save extends ACommands{
             writer.write(routeDAO);
 
         } catch (RuntimeException e) {
-            output("не удалось сохранить коллекцию " + e.getMessage());
+            System.out.println("не удалось сохранить коллекцию " + e.getMessage() + System.lineSeparator());
+            e.printStackTrace();
         }
     }
 }

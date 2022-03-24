@@ -20,8 +20,14 @@ public class Console implements RouteInformation {
                 out.name = sc.nextLine().trim();
                 if (out.name.isEmpty()) {
                     System.out.println("название не может быть пустым");
-                    continue;}
-                break;
+                    continue;
+                }
+                //TODO на крайний случай если не перепишем парсер
+                if (out.name.contains(",")){
+                    System.out.println("В имени нельзя использовать запятую");
+                    continue;
+                }
+                  break;
             }catch (NoSuchElementException e){throw new ExitException(e.getMessage());}
             catch (RuntimeException e) {
                 System.out.println("введите строку");
@@ -85,6 +91,11 @@ public class Console implements RouteInformation {
                 if (out.nameFrom.isEmpty()) {
                     System.out.println("название не может быть пустым");
                     continue;}
+
+                if (out.nameFrom.contains(",")){
+                    System.out.println("В имени нельзя использовать запятую");
+                    continue;
+                }
                 break;
             }catch (NoSuchElementException e){throw new ExitException(e.getMessage());}
             catch (RuntimeException e) {
@@ -119,6 +130,10 @@ public class Console implements RouteInformation {
         while(true){
             try{
                 out.nameTo = sc.nextLine();
+                if (out.nameTo.contains(",")){
+                    System.out.println("В имени нельзя использовать запятую");
+                    continue;
+                }
                 break;
             }
             catch (NoSuchElementException e){throw new ExitException(e.getMessage());}

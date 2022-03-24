@@ -84,7 +84,7 @@ public class RouteDAO implements DAO {
    public String getCollection() {
        String out = " ";
        for (Route route: collection)
-           out += route.toString() + System.lineSeparator();
+           out += route.toString() + System.lineSeparator() ;
        return(out);
    }
 

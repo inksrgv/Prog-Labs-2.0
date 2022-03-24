@@ -22,8 +22,12 @@ public class Add extends ACommands{
                     info.distance);
             routeDAO.create(route);
         }catch (NoSuchElementException e){throw new ExitException(e.getMessage());}
+        catch (NullPointerException e){
+            System.out.println(e.getMessage());
+        }
         catch (RuntimeException e) {
-            System.out.println("невозможно добавить элемент в коллекцию");
+            System.out.println("невозможно добавить элемент в коллекцию" + System.lineSeparator());
+            e.printStackTrace();
             return;
         }
         output("элемент добавлен в коллекцию");

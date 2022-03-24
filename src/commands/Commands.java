@@ -3,12 +3,12 @@ package commands;
 import dao.RouteDAO;
 import exceptions.EmptyInputException;
 import exceptions.ExitException;
-import file.FileReader;
+import file.CSVFileReader;
 import console.ConsoleReader;
 import java.util.NoSuchElementException;
 
 public class Commands {
-    static FileReader reader = new FileReader();
+    static CSVFileReader reader = new CSVFileReader();
     static RouteDAO dao = reader.read();
     /**
      * Метод для запуска программы. Вывод на консоль начала работы программы.
@@ -48,6 +48,9 @@ public class Commands {
             catch (ExitException e){
                 System.out.println(e.getMessage());
                 break;
+            }
+            catch (RuntimeException e){
+                System.out.println(e.getMessage());
             }
         }
     }

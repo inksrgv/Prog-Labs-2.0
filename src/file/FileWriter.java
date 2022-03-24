@@ -2,6 +2,7 @@ package file;
 
 import dao.DAO;
 import dao.RouteDAO;
+import org.apache.commons.csv.CSVPrinter;
 import utils.Route;
 import utils.RouteInfo;
 
@@ -38,16 +39,15 @@ public class FileWriter {
             fos.flush();
             fos.close();
             System.out.println("элемент успешно сохранен");
+
         }
         catch (IOException e){
             //saveToTmp(routeDAO);
             System.out.println("не удалось сохранить: "+e.getMessage());
         }
-    }
-    //public void clear(){
-        //file.;
-    //}
 
+    }
+/*
     private static void save(RouteDAO dao, String fileName) throws IOException{
 
         String filepath = directory + fileName;
@@ -90,6 +90,8 @@ public class FileWriter {
         File dir = new File(directory, name);
         try {
             dir.createNewFile();
+            if(!dir.createNewFile())
+                System.out.println("Файл не создан");
             return name;
         } catch (IOException e) {
             //...
@@ -106,4 +108,6 @@ public class FileWriter {
                 return fileName;
         }
     }
+
+*/
 }

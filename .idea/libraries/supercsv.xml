@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="supercsv">
+    <CLASSES />
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/Downloads/commons-csv-1.9.0-bin.zip!/commons-csv-1.9.0/apidocs" />
+    </JAVADOC>
+    <SOURCES />
+  </library>
+</component>

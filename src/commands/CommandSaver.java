@@ -8,7 +8,7 @@ import java.util.Map;
  */
 public class CommandSaver {
     static final Map<String, ACommands> commandsMap = new LinkedHashMap<>();
-    {
+    static {
         commandsMap.put("help", new Help()); //done
         commandsMap.put("info", new Info()); //done
         commandsMap.put("show", new Show()); //done

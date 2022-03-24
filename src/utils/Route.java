@@ -1,12 +1,9 @@
 package utils;
 
-import dao.RouteDAO;
-
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
 
 
 public class Route {
@@ -19,9 +16,8 @@ public class Route {
     private Integer distance; //Поле не может быть null, Значение поля должно быть больше 1
 
     public String getDescription() {
-        return id + "," + name + ","  + coordinates.getCoorX() + "," + coordinates.getCoorY() + "," + creationDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy : HH.mm.ss")) + "," + from.getFromX() + "," + from.getFromY() + ","
-                +
-                from.getName() + "," +  + to.getToX() + "," + to.getToY() + "," + to.getName()+","+ distance;
+            return id + "," + name +","+ coordinates.getCoorX() + "," + coordinates.getCoorY() + "," + creationDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy : HH.mm.ss")) + "," + from.getFromX() + "," + from.getFromY() + ","
+                    + from.getName() + "," + to.getToX() + "," + to.getToY() + "," + to.getName() + "," + distance;
     }
 
     public Route(String name, double coordinatesX, Double coordinatesY, double fromX, Long fromY, String nameFrom, int toX, float toY, String nameTo, Integer distance ){
@@ -35,7 +31,7 @@ public class Route {
     }
 
     public Route(RouteInfo information) {
-        id = IdGenerator.nextId();
+        id = information.id ;
         name = information.name;
         coordinates = new Coordinates(information.x, information.y);
         LocalDate date = LocalDate.parse(information.creationDate, DateTimeFormatter.ofPattern("dd.MM.yyyy : HH.mm.ss"));
@@ -60,7 +56,7 @@ public class Route {
                 "location (from): " + from.toString() + System.lineSeparator() +
                 "location (to): " + to.toString() + System.lineSeparator() +
                 "distance: " + distance.toString() + System.lineSeparator() +
-                "creation date: " + creationDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy : HH.mm.ss")) + System.lineSeparator() ;
+                "creation date: " + creationDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy : HH.mm.ss"));
     }
 
     public void update(RouteInfo routeInfo){

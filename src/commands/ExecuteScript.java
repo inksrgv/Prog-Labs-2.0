@@ -2,7 +2,7 @@ package commands;
 
 import dao.RouteDAO;
 import exceptions.EmptyInputException;
-import file.FileReader;
+import file.CSVFileReader;
 import utils.*;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -14,7 +14,7 @@ import java.util.*;
  */
 public class ExecuteScript extends ACommands{
 
-    file.FileReader reader = new FileReader();
+    file.CSVFileReader reader = new CSVFileReader();
     RouteDAO dao = reader.read();
     public void execute(RouteDAO routeDAO) {
 

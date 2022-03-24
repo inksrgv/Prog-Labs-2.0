@@ -1,8 +1,6 @@
 package utils;
 
-
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class RouteInfo {
@@ -33,6 +31,8 @@ public class RouteInfo {
         nameTo = data.get(10);
         distance = Integer.parseInt(data.get(11));
     }
+
+    public RouteInfo(int i, String name, double v, double parseDouble, ZonedDateTime parse, double aDouble, long l, String fromName, int parseInt, long parseLong, String toName, int anInt) {}
 
     public RouteInfo() {}
 }
