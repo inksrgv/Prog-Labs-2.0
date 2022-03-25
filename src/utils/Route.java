@@ -1,6 +1,7 @@
 package utils;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -34,8 +35,8 @@ public class Route {
         id = information.id ;
         name = information.name;
         coordinates = new Coordinates(information.x, information.y);
-        LocalDate date = LocalDate.parse(information.creationDate, DateTimeFormatter.ofPattern("dd.MM.yyyy : HH.mm.ss"));
-        creationDate = date.atStartOfDay(ZoneId.systemDefault());
+        LocalDateTime date = LocalDateTime.parse(information.creationDate, DateTimeFormatter.ofPattern("dd.MM.yyyy : HH.mm.ss"));
+        creationDate = date.atZone(ZoneId.systemDefault());
         from = new Location(information.fromX, information.fromY, information.nameFrom);
         to = new utils.loc.Location(information.toX, information.toY, information.nameTo);
         distance = information.distance;
@@ -45,7 +46,6 @@ public class Route {
 
     public int getDistance(){return distance;}
 
-    //private final String date = creationDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy : HH.mm.ss"));
 
     @Override
     public String toString(){

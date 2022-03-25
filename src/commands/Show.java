@@ -15,7 +15,7 @@ public class Show extends ACommands {
             output("коллекция пустая");
         }
         else
-            System.out.println(routeDAO.getCollection() );
+            System.out.println(routeDAO.getCollection()  );
 
 //Route{type: ArrayDeque,size: 1,initDate: 23.03.2022 : 21.51.35'}
     }

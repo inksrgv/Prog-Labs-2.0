@@ -14,7 +14,7 @@ public class Console implements RouteInformation {
 
     public RouteInfo info() {
 
-        System.out.println("Введите название маршрута, не может быть пустым ");
+        System.out.println("Введите название маршрута, не может быть пустым. В имени нельзя использовать запятую ");
         while (true) {
             try {
                 out.name = sc.nextLine().trim();
@@ -22,7 +22,7 @@ public class Console implements RouteInformation {
                     System.out.println("название не может быть пустым");
                     continue;
                 }
-                //TODO на крайний случай если не перепишем парсер
+                //paerser idi nahui
                 if (out.name.contains(",")){
                     System.out.println("В имени нельзя использовать запятую");
                     continue;
@@ -84,7 +84,7 @@ public class Console implements RouteInformation {
             }
         }
 
-        System.out.println("Введите название точки отправления ");
+        System.out.println("Введите название точки отправления. В имени нельзя использовать запятую ");
         while (true) {
             try {
                 out.nameFrom = sc.nextLine();
@@ -126,7 +126,7 @@ public class Console implements RouteInformation {
                 System.out.println("неправильный ввод данных");
             }
         }
-        System.out.println("введите название точки прибытия");
+        System.out.println("введите название точки прибытия. В имени нельзя использовать запятую");
         while(true){
             try{
                 out.nameTo = sc.nextLine();

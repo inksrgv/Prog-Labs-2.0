@@ -22,15 +22,19 @@ import java.util.Map;
  * Класс, который позволяет пользователю и JVM осуществлять корректное чтение файла
  */
 public class CSVFileReader {
+    private static String nameOfFile = System.getenv().get("collection.csv");
+    private static final String TEMP_FILE = "C:/collection_temp.csv";
     public RouteDAO read() {
-        Map<String, String> listOfEnvs = System.getenv();
-        String nameOfFile = listOfEnvs.get("collection.csv");
         File file = new File(nameOfFile);
         String input = " ";
         if (!file.exists()) {
             try {
-                if(!file.createNewFile())
-                    System.out.println("Файл не создан");
+                if(!file.createNewFile()){
+                    System.out.println("Чтение временного файла");
+                    CSVFileReader.nameOfFile = TEMP_FILE;
+                    file = new File(nameOfFile);
+                }
+//                System.out.println("Файл не создан");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -47,7 +51,8 @@ public class CSVFileReader {
             input = bos.toString();
 
         }catch (IOException e) {
-            return null;
+//            FileWriter.createTmpFile();
+            return new RouteDAO();
         }
 
         List<String> lines = new ArrayList<String>(Arrays.asList(input.split(System.lineSeparator())));
@@ -70,10 +75,10 @@ public class CSVFileReader {
         }
         return dao;
     }
-    /*
-    private static final String SAMPLE_CSV_FILE_PATH = "D:/collection.csv";
 
-    public RouteDAO readCSV(){
+    //private static final String SAMPLE_CSV_FILE_PATH = "D:/test/collection.csv";
+/*
+    public String readCSV(){
         RouteDAO dao = new RouteDAO();
         Map<String, String> listOfEnvs = System.getenv();
         String nameOfFile = listOfEnvs.get("collection.csv");
@@ -87,6 +92,7 @@ public class CSVFileReader {
                 e.printStackTrace();
             }
         }
+        String output = null;
         try {
             Reader reader = Files.newBufferedReader(Paths.get(SAMPLE_CSV_FILE_PATH));
             CSVParser parser = new CSVParser(reader, CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim());
@@ -106,21 +112,23 @@ public class CSVFileReader {
                 String toName = csvRecord.get(10);
                 String distance = csvRecord.get(11);
 
-                /*String output = ("record no:" + csvRecord.getRecordNumber() + " " + System.lineSeparator()+"id " + id + System.lineSeparator() + "name " + name + System.lineSeparator() + "coordinates (" + coordx + " " + coordy
-                        + " )" + "location(from) ( " + fromx + " " + fromy + " " + fromName + " )" + System.lineSeparator() + "Location(to) ( " +
-                        tox + " " + toy + toName + " )" + System.lineSeparator() +
-                        "distance " + distance + System.lineSeparator() + "initialisation date " + initDate);*/
-                /*RouteInfo info = new RouteInfo(Integer.parseInt(id), name, Double.parseDouble(coordx), Double.parseDouble(coordy), ZonedDateTime.parse(initDate),
-                        Double.parseDouble(fromx), Long.parseLong(fromy), fromName, Integer.parseInt(tox), Long.parseLong(toy), toName, Integer.parseInt(distance));
-                dao.create(new Route(info));
+                //output = ("record no:" + csvRecord.getRecordNumber() + " " + System.lineSeparator()+"id " + id + System.lineSeparator() + "name " + name + System.lineSeparator() + "coordinates (" + coordx + " " + coordy
+                  //      + " )" + "location(from) ( " + fromx + " " + fromy + " " + fromName + " )" + System.lineSeparator() + "Location(to) ( " +
+                    //    tox + " " + toy + toName + " )" + System.lineSeparator() +
+                      //  "distance " + distance + System.lineSeparator() + "initialisation date " + initDate);
+               // RouteInfo info = new RouteInfo(Integer.parseInt(id), name, Double.parseDouble(coordx), Double.parseDouble(coordy), ZonedDateTime.parse(initDate),
+                 //       Double.parseDouble(fromx), Long.parseLong(fromy), fromName, Integer.parseInt(tox), Long.parseLong(toy), toName, Integer.parseInt(distance));
+                //dao.create(new Route(info));
+                output = "initialisation date " + initDate;
             }
         }
         catch(IOException e){
             System.out.println(e.getMessage());
+            return null;
         }
         catch (RuntimeException e){
-            return new RouteDAO();
+            e.printStackTrace();
         }
-        return dao;
+        return output;
     }*/
 }
