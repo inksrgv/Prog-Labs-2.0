@@ -5,6 +5,8 @@ import exceptions.EmptyInputException;
 import exceptions.ExitException;
 import file.CSVFileReader;
 import console.ConsoleReader;
+import utils.IdGenerator;
+
 import java.util.NoSuchElementException;
 
 public class Commands {
@@ -14,7 +16,7 @@ public class Commands {
      * Метод для запуска программы. Вывод на консоль начала работы программы.
      */
     public static void run() {
-
+        IdGenerator.reloadId(dao);
         ACommands commands;
         ConsoleReader consoleReader = new ConsoleReader();
         System.out.println("\t\t\t\t\t▒██░░░─░▄█▀▄─░▐█▀▄──░▄█▀▄─     ▒█▀▀ \n" +

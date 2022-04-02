@@ -95,4 +95,9 @@ public class RouteDAO implements DAO {
                 '}';
     }
 
+    public int getMaxId(){
+       if (collection.isEmpty()) return  1;
+       return collection.getLast().getId();
+    }
+
 }

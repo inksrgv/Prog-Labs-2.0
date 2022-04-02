@@ -1,8 +1,13 @@
 package utils;
 
+import dao.RouteDAO;
+
 public class IdGenerator {
-    public static int id = 1;
+    private static int id;
+    public static void reloadId(RouteDAO dao) {
+        id = dao.getMaxId();
+    }
     public static int nextId(){
-        return  id++;
+        return ++id;
     }
 }
