@@ -10,6 +10,7 @@ import static console.ConsoleOutputer.output;
 public class Info extends ACommands {
     CSVFileReader reader = new CSVFileReader();
     public void execute(RouteDAO routeDAO) {
-        System.out.println(reader.read());
+        //System.out.println(reader.read());
+        System.out.println(routeDAO.toString());
     }
 }
