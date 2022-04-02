@@ -1,5 +1,3 @@
-package utils;
-
 import commands.Commands;
 
 public class Main {
