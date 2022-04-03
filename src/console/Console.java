@@ -22,7 +22,7 @@ public class Console implements RouteInformation {
                     System.out.println("название не может быть пустым");
                     continue;
                 }
-                //paerser idi nahui
+                //parser idi nahui
                 if (out.name.contains(",")){
                     System.out.println("В имени нельзя использовать запятую");
                     continue;
